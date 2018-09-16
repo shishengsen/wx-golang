@@ -22,6 +22,7 @@ type MpConfig struct {
 	IsExpire				bool
 	JsapiTicket				string
 	JsapiTicketExpiresTime	int64
+	OAuthToken				WxOAuthAccessToken
 }
 
 // 结构体参数验证
