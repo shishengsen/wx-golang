@@ -17,3 +17,7 @@ func Sha1(params ...string) string {
 	sha1.Write([]byte(finalStr))
 	return hex.EncodeToString(sha1.Sum([]byte("")))
 }
+
+func WxCrypto() string {
+	return ""
+}

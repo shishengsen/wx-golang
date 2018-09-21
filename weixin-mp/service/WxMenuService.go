@@ -1,16 +1,16 @@
-package menu
+package service
 
 import (
 	"fmt"
 	"encoding/json"
 	"weixin-golang/weixin-mp/enpity"
-	"weixin-golang/weixin-mp/service"
 	"weixin-golang/weixin-common/http"
 )
 
 const (
-	create_menu			=			"https://api.weixin.qq.com/cgi-bin/menu/create?access_token="
+	create_menu			=			"https://api.weixin.qq.com/cgi-bin/menu/create?access_token=%s"
 	query_menu			=			"https://api.weixin.qq.com/cgi-bin/menu/get?access_token=%s"
+	delete_menu			=			"https://api.weixin.qq.com/cgi-bin/menu/delete?access_token=%s"
 )
 
 // 自定义菜单创建接口
@@ -26,7 +26,7 @@ func WxMpCreateMenuByJson(menuJson string) {
 
 // 自定义菜单查询接口
 func WxMpQueryMenu() enpity.WxMenu {
-	req_url := fmt.Sprintf(query_menu, service.GetAccessToken())
+	req_url := fmt.Sprintf(query_menu, GetAccessToken())
 	msg, err := http.Get(req_url)
 	if err != nil {
 		panic(err)
@@ -38,12 +38,17 @@ func WxMpQueryMenu() enpity.WxMenu {
 
 // 自定义菜单删除接口
 func WxMpDeleteMenu() string {
-	return ""
+	req_url := fmt.Sprintf(delete_menu, GetAccessToken())
+	msg, err := http.Get(req_url)
+	if err != nil {
+		panic(err)
+	}
+	return string(msg)
 }
 
 // 创建自定义菜单
 func createMenu(body string) string {
-	req_url := create_menu + service.GetAccessToken()
+	req_url := fmt.Sprintf(create_menu, GetAccessToken())
 	msg, err := http.Post(req_url, body)
 	if err != nil {
 		panic(err)
