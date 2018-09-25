@@ -18,9 +18,9 @@ const (
 )
 
 // 添加客服信息
-func AddKf(kf enpity.WxKf) string {
-	req_url := fmt.Sprintf(add_kf_url, GetAccessToken())
-	msg, err  := http.Post(req_url, kf.ToJson(kf))
+func (w *WeChat)AddKf(kf enpity.WxKf) string {
+	reqUrl := fmt.Sprintf(add_kf_url, w.GetAccessToken())
+	msg, err  := http.Post(reqUrl, kf.ToJson(kf))
 	if err != nil {
 		panic(err)
 	}
@@ -28,9 +28,9 @@ func AddKf(kf enpity.WxKf) string {
 }
 
 // 更新客服信息
-func UpdateKf(kf enpity.WxKf) string {
-	req_url := fmt.Sprintf(update_kf_url, GetAccessToken())
-	msg, err  := http.Post(req_url, kf.ToJson(kf))
+func (w *WeChat)UpdateKf(kf enpity.WxKf) string {
+	reqUrl := fmt.Sprintf(update_kf_url, w.GetAccessToken())
+	msg, err  := http.Post(reqUrl, kf.ToJson(kf))
 	if err != nil {
 		panic(err)
 	}
@@ -38,9 +38,9 @@ func UpdateKf(kf enpity.WxKf) string {
 }
 
 // 删除客服信息
-func DeleteKf(kf enpity.WxKf) string {
-	req_url := fmt.Sprintf(delete_kf_url, GetAccessToken())
-	msg, err := http.Post(req_url, kf.ToJson(kf))
+func (w *WeChat)DeleteKf(kf enpity.WxKf) string {
+	reqUrl := fmt.Sprintf(delete_kf_url, w.GetAccessToken())
+	msg, err := http.Post(reqUrl, kf.ToJson(kf))
 	if err != nil {
 		panic(err)
 	}
@@ -48,9 +48,9 @@ func DeleteKf(kf enpity.WxKf) string {
 }
 
 // 设置客服头像信息
-func SetKfHeader(kf enpity.WxKf, file multipart.File) string {
-	req_url := fmt.Sprintf(set_kf_header, GetAccessToken(), kf.KfAccount)
-	msg, err := http.PostWithFile(req_url, file)
+func (w *WeChat)SetKfHeader(kf enpity.WxKf, file multipart.File) string {
+	reqUrl := fmt.Sprintf(set_kf_header, w.GetAccessToken(), kf.KfAccount)
+	msg, err := http.PostWithFile(reqUrl, file)
 	if err != nil {
 		panic(err)
 	}
@@ -58,9 +58,9 @@ func SetKfHeader(kf enpity.WxKf, file multipart.File) string {
 }
 
 // 获取所有客服账号
-func AllKf() enpity.WxKfs {
-	req_url := fmt.Sprintf(get_kf_all, GetAccessToken())
-	msg, err := http.Get(req_url)
+func (w *WeChat)AllKf() enpity.WxKfs {
+	reqUrl := fmt.Sprintf(get_kf_all, w.GetAccessToken())
+	msg, err := http.Get(reqUrl)
 	if err != nil {
 		panic(err)
 	}
@@ -69,10 +69,10 @@ func AllKf() enpity.WxKfs {
 	return kfs
 }
 
-//
-func SendKfMsg(kfMsg enpity.WxKfMsg) string {
-	req_url := fmt.Sprintf(send_kf_msg, GetAccessToken())
-	msg, err := http.Post(req_url, kfMsg.ToJson(kfMsg))
+// 发送客服消息
+func (w *WeChat)SendKfMsg(kfMsg enpity.WxKfMsg) string {
+	reqUrl := fmt.Sprintf(send_kf_msg, w.GetAccessToken())
+	msg, err := http.Post(reqUrl, kfMsg.ToJson(kfMsg))
 	if err != nil {
 		panic(err)
 	}

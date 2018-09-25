@@ -20,8 +20,8 @@ const (
 
 // 根据 code 获取access_token
 func GetOAuthaccessToken(code string) enpity.WxOAuthAccessToken {
-	cfg := GetMpConfig()
-	req_url := fmt.Sprintf(oauth_access_token_url, cfg.AppId, cfg.Secret, code)
+	weChat := GetWeChat()
+	req_url := fmt.Sprintf(oauth_access_token_url, weChat.Cfg.AppId, weChat.Cfg.Secret, code)
 	msg, err := http.Get(req_url)
 	if err != nil {
 		panic(err)
@@ -30,7 +30,7 @@ func GetOAuthaccessToken(code string) enpity.WxOAuthAccessToken {
 	json.Unmarshal(msg, &oauth)
 	oauth.ExpiresIn +=  + time.Now().Unix()
 	oauth.IsExpires = false
-	wxOAuthTokenStoreInMem(oauth)
+	weChat.wxOAuthTokenStoreInMem(oauth)
 	return oauth
 }
 
@@ -40,15 +40,15 @@ func Oauth2buildAuthorizationUrl(redirectURI string, scope string, state string)
 	if err != nil {
 		panic(err)
 	}
-	cfg := GetMpConfig()
-	authorizeUrl := fmt.Sprintf(authorize_url, cfg.AppId, redirectURI, scope, state)
+	weChat := GetWeChat()
+	authorizeUrl := fmt.Sprintf(authorize_url, weChat.Cfg.AppId, redirectURI, scope, state)
 	return authorizeUrl
 }
 
 // 刷新token信息
 func RefreshOAuthToken() enpity.WxOAuthAccessToken {
-	cfg := GetMpConfig()
-	req_url := fmt.Sprintf(oauth_refresh_token_url, cfg.AppId, cfg.OAuthToken.OauthRefreshToken)
+	weChat := GetWeChat()
+	req_url := fmt.Sprintf(oauth_refresh_token_url, weChat.Cfg.AppId, weChat.Cfg.OAuthToken.OauthRefreshToken)
 	msg, err := http.Get(req_url)
 	if err != nil {
 		panic(err)
@@ -57,23 +57,23 @@ func RefreshOAuthToken() enpity.WxOAuthAccessToken {
 	json.Unmarshal(msg, &oauth)
 	oauth.ExpiresIn +=  + time.Now().Unix()
 	oauth.IsExpires = false
-	wxOAuthTokenStoreInMem(oauth)
+	weChat.wxOAuthTokenStoreInMem(oauth)
 	return oauth
 }
 
 // 判断是否过期
-func isExpires() bool {
+func isOAuthExpires() bool {
 	lock := sync.NewCond(new(sync.Mutex))
 	lock.L.Lock()
-	isExpires := GetMpConfig().OAuthToken.ExpiresIn - 200 < time.Now().Unix()
+	isExpires := GetWeChat().Cfg.OAuthToken.ExpiresIn - 200 < time.Now().Unix()
 	lock.L.Unlock()
 	return isExpires
 }
 
 // 检验授权凭证（access_token）是否有效
 func verifyToken(openid string) bool {
-	cfg := GetMpConfig()
-	req_url := fmt.Sprintf(verify_oauth_token, cfg.OAuthToken.OauthAccessToken, openid)
+	weChat := GetWeChat()
+	req_url := fmt.Sprintf(verify_oauth_token, weChat.Cfg.OAuthToken.OauthAccessToken, openid)
 	_, err := http.Get(req_url)
 	return err == nil
 }

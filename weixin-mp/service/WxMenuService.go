@@ -14,20 +14,21 @@ const (
 )
 
 // 自定义菜单创建接口
-func WxMpCreateMenu(wxMenu enpity.WxMenu) {
+func (w *WeChat)WxMpCreateMenu(wxMenu enpity.WxMenu) {
 	menuJson := wxMenu.ToJson(wxMenu)
-	WxMpCreateMenuByJson(menuJson)
+	w.WxMpCreateMenuByJson(menuJson)
 }
 
 // 自定义菜单创建接口()
-func WxMpCreateMenuByJson(menuJson string) {
-	createMenu(menuJson)
+func (w *WeChat)WxMpCreateMenuByJson(menuJson string) {
+	reqUrl := fmt.Sprintf(create_menu, w.GetAccessToken())
+	createMenu(reqUrl, menuJson)
 }
 
 // 自定义菜单查询接口
-func WxMpQueryMenu() enpity.WxMenu {
-	req_url := fmt.Sprintf(query_menu, GetAccessToken())
-	msg, err := http.Get(req_url)
+func (w *WeChat)WxMpQueryMenu() enpity.WxMenu {
+	reqUrl := fmt.Sprintf(query_menu, w.GetAccessToken())
+	msg, err := http.Get(reqUrl)
 	if err != nil {
 		panic(err)
 	}
@@ -37,9 +38,9 @@ func WxMpQueryMenu() enpity.WxMenu {
 }
 
 // 自定义菜单删除接口
-func WxMpDeleteMenu() string {
-	req_url := fmt.Sprintf(delete_menu, GetAccessToken())
-	msg, err := http.Get(req_url)
+func (w *WeChat)WxMpDeleteMenu() string {
+	reqUrl := fmt.Sprintf(delete_menu, w.GetAccessToken())
+	msg, err := http.Get(reqUrl)
 	if err != nil {
 		panic(err)
 	}
@@ -47,9 +48,8 @@ func WxMpDeleteMenu() string {
 }
 
 // 创建自定义菜单
-func createMenu(body string) string {
-	req_url := fmt.Sprintf(create_menu, GetAccessToken())
-	msg, err := http.Post(req_url, body)
+func createMenu(reqUrl, body string) string {
+	msg, err := http.Post(reqUrl, body)
 	if err != nil {
 		panic(err)
 	}
