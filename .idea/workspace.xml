@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="bb8ca6c1-e952-43d9-bbb8-e03c45b9e62c" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/weixin-mp/service/WxMsgRouterService.go" beforeDir="false" afterPath="$PROJECT_DIR$/weixin-mp/service/WxMsgRouterService.go" afterDir="false" />
-    </list>
+    <list default="true" id="bb8ca6c1-e952-43d9-bbb8-e03c45b9e62c" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -26,13 +24,13 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
-          <entry key="go" value="28" />
+          <entry key="go" value="29" />
           <entry key="md" value="2" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="Go" value="28" />
+          <entry key="Go" value="29" />
           <entry key="Markdown" value="1" />
           <entry key="PLAIN_TEXT" value="1" />
         </counts>
@@ -40,13 +38,13 @@
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="go" value="7466" />
-          <entry key="md" value="355" />
+          <entry key="md" value="377" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="Go" value="7466" />
-          <entry key="Markdown" value="341" />
+          <entry key="Markdown" value="363" />
           <entry key="PLAIN_TEXT" value="14" />
         </counts>
       </usages-collector>
@@ -66,12 +64,12 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/README.md">
           <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
             <state split_layout="SPLIT">
-              <first_editor>
-                <caret column="2" lean-forward="true" selection-start-column="2" selection-end-column="2" />
+              <first_editor relative-caret-position="256">
+                <caret line="16" column="12" selection-start-line="16" selection-start-column="12" selection-end-line="16" selection-end-column="12" />
               </first_editor>
               <second_editor />
             </state>
@@ -87,14 +85,23 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/weixin-mp/service/WxMsgRouterService.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="432">
-              <caret line="27" column="25" selection-start-line="27" selection-start-column="25" selection-end-line="27" selection-end-column="25" />
+            <state relative-caret-position="504">
+              <caret line="34" lean-forward="true" selection-start-line="34" selection-end-line="34" />
               <folding>
                 <element signature="e#17#72#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/weixin-common/error/errormsg.go">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="48">
+              <caret line="3" lean-forward="true" selection-start-line="3" selection-end-line="3" />
             </state>
           </provider>
         </entry>
@@ -104,15 +111,6 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="80">
               <caret line="7" column="4" selection-start-line="7" selection-start-column="4" selection-end-line="7" selection-end-column="4" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/weixin-mp/service/WxMenuService.go">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="480">
-              <caret line="35" column="4" selection-start-line="35" selection-start-column="4" selection-end-line="35" selection-end-column="4" />
             </state>
           </provider>
         </entry>
@@ -180,8 +178,8 @@
         <option value="$PROJECT_DIR$/weixin-mp/enpity/MsgRouter_test.go" />
         <option value="$PROJECT_DIR$/weixin-mp/enpity/WxMessage.go" />
         <option value="$PROJECT_DIR$/weixin-mp/service/WxMsgRouterService_test.go" />
-        <option value="$PROJECT_DIR$/README.md" />
         <option value="$PROJECT_DIR$/weixin-mp/service/WxMsgRouterService.go" />
+        <option value="$PROJECT_DIR$/README.md" />
       </list>
     </option>
   </component>
@@ -227,7 +225,25 @@
               <item name="weixin-golang" type="b2602c69:ProjectViewProjectNode" />
               <item name="weixin-golang" type="462c0819:PsiDirectoryNode" />
               <item name="weixin-common" type="462c0819:PsiDirectoryNode" />
+              <item name="error" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="weixin-golang" type="b2602c69:ProjectViewProjectNode" />
+              <item name="weixin-golang" type="462c0819:PsiDirectoryNode" />
+              <item name="weixin-common" type="462c0819:PsiDirectoryNode" />
               <item name="http" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="weixin-golang" type="b2602c69:ProjectViewProjectNode" />
+              <item name="weixin-golang" type="462c0819:PsiDirectoryNode" />
+              <item name="weixin-common" type="462c0819:PsiDirectoryNode" />
+              <item name="log" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="weixin-golang" type="b2602c69:ProjectViewProjectNode" />
+              <item name="weixin-golang" type="462c0819:PsiDirectoryNode" />
+              <item name="weixin-common" type="462c0819:PsiDirectoryNode" />
+              <item name="wxconsts" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="weixin-golang" type="b2602c69:ProjectViewProjectNode" />
@@ -307,7 +323,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="49" y="23" width="1871" height="1057" extended-state="0" />
-    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.20831056" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -464,6 +479,23 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/weixin-mp/service/WxMsgRouterService.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="504">
+          <caret line="34" lean-forward="true" selection-start-line="34" selection-end-line="34" />
+          <folding>
+            <element signature="e#17#72#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/weixin-common/error/errormsg.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="48">
+          <caret line="3" lean-forward="true" selection-start-line="3" selection-end-line="3" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/README.md">
       <provider editor-type-id="text-editor">
         <state relative-caret-position="96">
@@ -472,20 +504,10 @@
       </provider>
       <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
         <state split_layout="SPLIT">
-          <first_editor>
-            <caret column="2" lean-forward="true" selection-start-column="2" selection-end-column="2" />
+          <first_editor relative-caret-position="256">
+            <caret line="16" column="12" selection-start-line="16" selection-start-column="12" selection-end-line="16" selection-end-column="12" />
           </first_editor>
           <second_editor />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/weixin-mp/service/WxMsgRouterService.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="432">
-          <caret line="27" column="25" selection-start-line="27" selection-start-column="25" selection-end-line="27" selection-end-column="25" />
-          <folding>
-            <element signature="e#17#72#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
