@@ -7,7 +7,17 @@
 
 该开发包的实现，主要参考了目前流行的java版的微信开发包——[Wechat-Group/weixin-java-tools](https://github.com/Wechat-Group/weixin-java-tools)
 
+#### DONE
+
+- [x] 微信配置实现以及相关实体的构建
+- [x] 微信accesstoken的获取、存储、刷新
+- [x] 微信客服相关接口
+- [x] 微信消息通知的路由分发操作实现
+
 #### TODO
 
-- [x] 微信accesstoken的获取、存储、刷新
-- [x] 微信消息通知的路由分发操作实现
+- [] 微信素材管理
+- [] 图文消息留言管理
+- [] 用户管理
+- [] 账户管理
+- [] 新版客服功能
