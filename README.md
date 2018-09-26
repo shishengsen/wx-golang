@@ -1,6 +1,6 @@
 ## Golang 实现的微信公众号开发工具
 
-![License](https://img.shields.io/github/license/Weixin-Golang/wx-golang.svg) 
+![License](https://img.shields.io/github/license/Weixin-Golang/wx-golang.svg)
 ![stars](https://img.shields.io/github/stars/Weixin-Golang/wx-golang.svg)
 ![forks](https://img.shields.io/github/forks/Weixin-Golang/wx-golang.svg)
 ![building](https://img.shields.io/badge/status-building-green.svg?longCache=true&style=plastic)
@@ -14,6 +14,7 @@
 - [x] 微信自定义菜单相关操作的实现
 - [x] 微信客服相关接口
 - [x] 微信消息通知的路由分发操作实现
+- [x] `http`接口实现
 
 #### TODO
 
