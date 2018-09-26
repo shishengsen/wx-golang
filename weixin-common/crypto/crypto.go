@@ -77,7 +77,7 @@ func WxMsgAesEncrypt(cipherText string, aesKey string) string {
 	}
 
 	pass64 := base64.StdEncoding.EncodeToString(xpass)
-	util.GetLogger().Infof("加密后:%v\n",pass64)
+	util.GetLogger().Infof("加密后:%v\n", pass64)
 	return string(pass64)
 }
 

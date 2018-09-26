@@ -5,24 +5,24 @@ import (
 )
 
 type WxMenu struct {
-	Button			[]WxButton		`json:"button,omitempty"`
+	Button []WxButton `json:"button,omitempty"`
 }
 
 type WxButton struct {
-	Type			string			`json:"type,omitempty"`
-	Name			string			`json:"name,omitempty"`
-	Key				string			`json:"key,omitempty"`
-	Url				string			`json:"url,omitempty"`
-	MediaId			string			`json:"media_id,omitempty"`
-	Sub_button		[]WxSubButton
+	Type       string `json:"type,omitempty"`
+	Name       string `json:"name,omitempty"`
+	Key        string `json:"key,omitempty"`
+	Url        string `json:"url,omitempty"`
+	MediaId    string `json:"media_id,omitempty"`
+	Sub_button []WxSubButton
 }
 
 type WxSubButton struct {
-	Type			string			`json:"type,omitempty"`
-	Name			string			`json:"name,omitempty"`
-	Key				string			`json:"key,omitempty"`
-	Url				string			`json:"url,omitempty"`
-	MediaId			string			`json:"media_id,omitempty"`
+	Type    string `json:"type,omitempty"`
+	Name    string `json:"name,omitempty"`
+	Key     string `json:"key,omitempty"`
+	Url     string `json:"url,omitempty"`
+	MediaId string `json:"media_id,omitempty"`
 }
 
 // 将WxMenu转换为json字段

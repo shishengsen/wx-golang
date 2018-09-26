@@ -1,11 +1,11 @@
 package log
 
 import (
-	"strings"
-	"time"
-	"os"
-	"sync"
 	"github.com/op/go-logging"
+	"os"
+	"strings"
+	"sync"
+	"time"
 )
 
 var log *logging.Logger
@@ -22,10 +22,10 @@ func LoggerInit() *logging.Logger {
 	logFile, err := os.Create("log/wx-" + s + ".log")
 	CheckError(err)
 	backend1 := logging.NewLogBackend(logFile, "", 0)
-    backend2 := logging.NewLogBackend(os.Stderr, "", 0)
-    backend2Formatter := logging.NewBackendFormatter(backend2, format)
-    backend1Leveled := logging.AddModuleLevel(backend1)
-    backend1Leveled.SetLevel(logging.INFO, "")
+	backend2 := logging.NewLogBackend(os.Stderr, "", 0)
+	backend2Formatter := logging.NewBackendFormatter(backend2, format)
+	backend1Leveled := logging.AddModuleLevel(backend1)
+	backend1Leveled.SetLevel(logging.INFO, "")
 	logging.SetBackend(backend1Leveled, backend2Formatter)
 	return log
 }
