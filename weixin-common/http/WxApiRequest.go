@@ -40,10 +40,11 @@ func PostWithFile(url string, file multipart.File) ([]byte, error) {
 	return nil, fmt.Errorf("http get error : uri=%v , statusCode=%v", url, resp.StatusCode)
 }
 
+// get接口使用
 func Get(url string) ([]byte, error) {
-	resp, err_resp := http.Get(url)
-	if err_resp != nil {
-		panic(err_resp)
+	resp, err := http.Get(url)
+	if err != nil {
+		panic(err)
 	}
 	defer resp.Body.Close()
 	if resp.StatusCode != http.StatusOK {

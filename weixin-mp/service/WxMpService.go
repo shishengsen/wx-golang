@@ -9,12 +9,15 @@ import (
 	"weixin-golang/weixin-common/crypto"
 	"weixin-golang/weixin-common/http"
 	"weixin-golang/weixin-common/log"
+	"weixin-golang/weixin-common/utils"
 	"weixin-golang/weixin-mp/enpity"
 )
 
 const (
-	access_token_url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=%s&secret=%s"
-	clear_quota      = "https://api.weixin.qq.com/cgi-bin/clear_quota?access_token=%s"
+	access_token_url = 		"https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=%s&secret=%s"
+	clear_quota      = 		"https://api.weixin.qq.com/cgi-bin/clear_quota?access_token=%s"
+	jsapi_ticket	 =		"https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=%s&type=jsapi"
+	jsapi_signature  =		"jsapi_ticket=%s&noncestr=%s&timestamp=%s&url=%s"
 )
 
 type WeChat struct {
@@ -50,10 +53,10 @@ func (w *WeChat) WxMpConfigStoreInRedis(cfg *enpity.MpConfig) {
 }
 
 // 将token信息存储在内存中
-func (w *WeChat) wxOAuthTokenStoreInMem(oauth enpity.WxOAuthAccessToken) {
+func (w *WeChat) wxOAuthTokenStoreInMem(oauth *enpity.WxOAuthAccessToken) {
 	lock := sync.NewCond(new(sync.Mutex))
 	lock.L.Lock()
-	GetWeChat().Cfg.OAuthToken = oauth
+	w.Cfg.OAuthToken = oauth
 	lock.L.Unlock()
 }
 
@@ -129,4 +132,47 @@ func (w *WeChat) wxMpSubscribeMsgService(buf []byte) enpity.WxMessage {
 // 检查微信功能调用的accessToken是否过期（注意，这里的accessToken不是获取用户信息的OAuth accessToken）
 func isExpires() bool {
 	return GetWeChat().Cfg.AccessTokenExpiresTime < time.Now().Unix()
+}
+
+func (w *WeChat)GetWxJsApiTicket(forceRefresh bool) enpity.WxJsTicket {
+	lock := sync.NewCond(new(sync.Mutex))
+	lock.L.Lock()
+	if forceRefresh {
+		getWxJsapiTicket(w.Cfg)
+	}
+	if w.Cfg.JsApiTicket.IsExpires() {
+		getWxJsapiTicket(w.Cfg)
+	}
+	lock.L.Unlock()
+	return *w.Cfg.JsApiTicket
+}
+
+func getWxJsapiTicket(cfg *enpity.MpConfig) {
+	reqUrl := fmt.Sprintf(jsapi_ticket, cfg.AccessToken)
+	resp, err := http.Get(reqUrl)
+	if err != nil {
+		panic(err)
+	}
+	var jsTicket enpity.WxJsTicket
+	err = json.Unmarshal(resp, &jsTicket)
+	if err != nil {
+		panic(err)
+	}
+	cfg.JsApiTicket = &jsTicket
+}
+
+// 返回微信jssdk使用所需要的信息
+func (w *WeChat)CreateJsapiSignature(url string) enpity.WxJsConfig {
+	appid := w.Cfg.AppId
+	jsticket := w.Cfg.JsApiTicket.Ticket
+	timestamp := time.Now().Unix()
+	noncestr := utils.RandomStr()
+	signature := crypto.Sha1WithAmple(fmt.Sprintf(jsapi_signature, jsticket, noncestr, timestamp, url))
+	jsConfig := enpity.WxJsConfig{
+		Appid: appid,
+		Timestmap: timestamp,
+		NoceStr: noncestr,
+		Signature: signature,
+	}
+	return jsConfig
 }

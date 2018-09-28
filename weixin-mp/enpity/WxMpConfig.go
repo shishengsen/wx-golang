@@ -16,12 +16,12 @@ type MpConfig struct {
 	Token  string `validate:"gt=0"`
 	AesKey string `validate:"gt=0"`
 
-	AccessToken            string
-	AccessTokenExpiresTime int64
-	IsExpire               bool
-	JsapiTicket            string
-	JsapiTicketExpiresTime int64
-	OAuthToken             WxOAuthAccessToken
+	AccessToken            		string
+	AccessTokenExpiresTime 		int64
+	IsExpire               		bool
+	OAuthToken             		*WxOAuthAccessToken
+	JsApiTicket					*WxJsTicket
+	JsApiConfig					*WxJsConfig
 }
 
 // 结构体参数验证
