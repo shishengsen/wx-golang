@@ -134,6 +134,7 @@ func isExpires() bool {
 	return GetWeChat().Cfg.AccessTokenExpiresTime < time.Now().Unix()
 }
 
+// 获取微信js的ticket
 func (w *WeChat)GetWxJsApiTicket(forceRefresh bool) enpity.WxJsTicket {
 	lock := sync.NewCond(new(sync.Mutex))
 	lock.L.Lock()
@@ -147,6 +148,7 @@ func (w *WeChat)GetWxJsApiTicket(forceRefresh bool) enpity.WxJsTicket {
 	return *w.Cfg.JsApiTicket
 }
 
+// 内部正式获取微信js的ticket信息
 func getWxJsapiTicket(cfg *enpity.MpConfig) {
 	reqUrl := fmt.Sprintf(jsapi_ticket, cfg.AccessToken)
 	resp, err := http.Get(reqUrl)
