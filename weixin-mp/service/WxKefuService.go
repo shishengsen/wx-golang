@@ -3,7 +3,7 @@ package service
 import (
 	"encoding/json"
 	"fmt"
-	"mime/multipart"
+	"os"
 	"weixin-golang/weixin-common/http"
 	"weixin-golang/weixin-mp/enpity"
 )
@@ -20,50 +20,35 @@ const (
 // 添加客服信息
 func (w *WeChat) AddKf(kf enpity.WxKf) string {
 	reqUrl := fmt.Sprintf(add_kf_url, w.GetAccessToken())
-	msg, err := http.Post(reqUrl, kf.ToJson(kf))
-	if err != nil {
-		panic(err)
-	}
+	msg := http.Post(reqUrl, kf.ToJson(kf))
 	return string(msg)
 }
 
 // 更新客服信息
 func (w *WeChat) UpdateKf(kf enpity.WxKf) string {
 	reqUrl := fmt.Sprintf(update_kf_url, w.GetAccessToken())
-	msg, err := http.Post(reqUrl, kf.ToJson(kf))
-	if err != nil {
-		panic(err)
-	}
+	msg := http.Post(reqUrl, kf.ToJson(kf))
 	return string(msg)
 }
 
 // 删除客服信息
 func (w *WeChat) DeleteKf(kf enpity.WxKf) string {
 	reqUrl := fmt.Sprintf(delete_kf_url, w.GetAccessToken())
-	msg, err := http.Post(reqUrl, kf.ToJson(kf))
-	if err != nil {
-		panic(err)
-	}
+	msg := http.Post(reqUrl, kf.ToJson(kf))
 	return string(msg)
 }
 
 // 设置客服头像信息
-func (w *WeChat) SetKfHeader(kf enpity.WxKf, file multipart.File) string {
+func (w *WeChat) SetKfHeader(kf enpity.WxKf, file os.File) string {
 	reqUrl := fmt.Sprintf(set_kf_header, w.GetAccessToken(), kf.KfAccount)
-	msg, err := http.PostWithFile(reqUrl, file)
-	if err != nil {
-		panic(err)
-	}
+	msg := http.PostWithFile(reqUrl, &file)
 	return string(msg)
 }
 
 // 获取所有客服账号
 func (w *WeChat) AllKf() enpity.WxKfs {
 	reqUrl := fmt.Sprintf(get_kf_all, w.GetAccessToken())
-	msg, err := http.Get(reqUrl)
-	if err != nil {
-		panic(err)
-	}
+	msg := http.Get(reqUrl)
 	var kfs enpity.WxKfs
 	json.Unmarshal(msg, &kfs)
 	return kfs
@@ -72,9 +57,6 @@ func (w *WeChat) AllKf() enpity.WxKfs {
 // 发送客服消息
 func (w *WeChat) SendKfMsg(kfMsg enpity.WxKfMsg) string {
 	reqUrl := fmt.Sprintf(send_kf_msg, w.GetAccessToken())
-	msg, err := http.Post(reqUrl, kfMsg.ToJson(kfMsg))
-	if err != nil {
-		panic(err)
-	}
+	msg := http.Post(reqUrl, kfMsg.ToJson(kfMsg))
 	return string(msg)
 }

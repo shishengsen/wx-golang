@@ -50,14 +50,14 @@ type KfMusicMsg struct {
 }
 
 type KfNews struct {
-	Articles []Article `json:"articles"`
+	Articles []KfArticle `json:"articles"`
 }
 
 type KfCard struct {
 	CardId string `json:"card_id"`
 }
 
-type Article struct {
+type KfArticle struct {
 	Title       string `json:"title"`
 	Description string `json:"description"`
 	Url         string `json:"url"`

@@ -20,6 +20,13 @@ const (
 	TYPE_MEDIA_ID           = "media_id"
 	TYPE_VIEW_LIMITED       = "view_limited"
 
+	// 临时素材类别
+
+	TEMP_MATERIAL_IMAGE			=	"image"
+	TEMP_MATERIAL_VOICE			=	"voice"
+	TEMP_MATERIAL_VIDEO			=	"video"
+	TEMP_MATERIAL_THUMB			=	"thumb"
+
 	// 语言类别
 
 	LANG_ZH_CN				= "zh_CN"

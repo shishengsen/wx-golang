@@ -103,10 +103,7 @@ func (w *WeChat) WxApiClearQuota() map[string]interface{} {
 	if err != nil {
 		panic(err)
 	}
-	msg, err := http.Post(reqUrl, string(reqBody))
-	if err != nil {
-		panic(err)
-	}
+	msg := http.Post(reqUrl, string(reqBody))
 	var respBody map[string]interface{}
 	json.Unmarshal(msg, &reqBody)
 	return respBody
@@ -115,7 +112,7 @@ func (w *WeChat) WxApiClearQuota() map[string]interface{} {
 // 内部调用刷新accessToken的微信api接口，此处是真正实现accessToken刷新的方法
 func (w *WeChat) refreshToken(cfg *enpity.MpConfig) map[string]interface{} {
 	requestUrl := fmt.Sprintf(access_token_url, cfg.AppId, cfg.Secret)
-	msg, _ := http.Get(requestUrl)
+	msg := http.Get(requestUrl)
 	var f interface{}
 	json.Unmarshal(msg, &f)
 	m := f.(map[string]interface{})
@@ -151,12 +148,9 @@ func (w *WeChat)GetWxJsApiTicket(forceRefresh bool) enpity.WxJsTicket {
 // 内部正式获取微信js的ticket信息
 func getWxJsapiTicket(cfg *enpity.MpConfig) {
 	reqUrl := fmt.Sprintf(jsapi_ticket, cfg.AccessToken)
-	resp, err := http.Get(reqUrl)
-	if err != nil {
-		panic(err)
-	}
+	resp := http.Get(reqUrl)
 	var jsTicket enpity.WxJsTicket
-	err = json.Unmarshal(resp, &jsTicket)
+	err := json.Unmarshal(resp, &jsTicket)
 	if err != nil {
 		panic(err)
 	}
@@ -170,11 +164,10 @@ func (w *WeChat)CreateJsapiSignature(url string) enpity.WxJsConfig {
 	timestamp := time.Now().Unix()
 	noncestr := utils.RandomStr()
 	signature := crypto.Sha1WithAmple(fmt.Sprintf(jsapi_signature, jsticket, noncestr, timestamp, url))
-	jsConfig := enpity.WxJsConfig{
+	return enpity.WxJsConfig{
 		Appid: appid,
 		Timestmap: timestamp,
 		NoceStr: noncestr,
 		Signature: signature,
 	}
-	return jsConfig
 }
