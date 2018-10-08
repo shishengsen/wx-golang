@@ -1,4 +1,4 @@
-package enpity
+package main
 
 // 微信消息推送消息结构体
 type WxMessage struct {

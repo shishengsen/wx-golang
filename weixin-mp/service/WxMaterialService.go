@@ -16,6 +16,7 @@ const (
 	upload_news_pic				=			"https://api.weixin.qq.com/cgi-bin/media/uploadimg?access_token=%s"
 	get_material_from_js		=			"https://api.weixin.qq.com/cgi-bin/media/get/jssdk?access_token=%s&media_id=%s"
 	upload_other_material		=			"https://api.weixin.qq.com/cgi-bin/material/add_material?access_token=%s&type=%s"
+	delete_material				=			"https://api.weixin.qq.com/cgi-bin/material/del_material?access_token=%s"
 )
 
 // 增加临时素材
@@ -77,4 +78,8 @@ func (w *WeChat)AddVideoMaterial(file os.File, desc enpity.VideoMaterialDesc) en
 	var result enpity.PermanentMaterial
 	json.Unmarshal(msg, &result)
 	return result
+}
+
+func (w *WeChat)DeleteMaterial(mediaId string) {
+	
 }
