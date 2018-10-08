@@ -1,7 +1,6 @@
 package error
 
 import (
-	"encoding/xml"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -40,6 +39,7 @@ func WxMpErrorFromByte(result []byte, resp *http.Response) {
 }
 
 func WxPayErrorFromByte(result []byte, resq *http.Response) []byte {
+
 	return nil
 }
 

@@ -6,11 +6,11 @@ import (
 	"fmt"
 	"sync"
 	"time"
-	"weixin-golang/weixin-common/crypto"
-	"weixin-golang/weixin-common/http"
-	"weixin-golang/weixin-common/log"
-	"weixin-golang/weixin-common/utils"
-	"weixin-golang/weixin-mp/enpity"
+	"wx-golang/weixin-common/crypto"
+	"wx-golang/weixin-common/http"
+	"wx-golang/weixin-common/log"
+	"wx-golang/weixin-common/utils"
+	"wx-golang/weixin-mp/enpity"
 )
 
 const (

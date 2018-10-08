@@ -1,7 +1,7 @@
 package service
 
 import (
-	"weixin-golang/weixin-mp/enpity"
+	"wx-golang/weixin-mp/enpity"
 )
 
 const (

@@ -3,8 +3,8 @@ package service
 import (
 	"encoding/json"
 	"fmt"
-	"weixin-golang/weixin-common/http"
-	"weixin-golang/weixin-mp/enpity"
+	"wx-golang/weixin-common/http"
+	"wx-golang/weixin-mp/enpity"
 )
 
 const (

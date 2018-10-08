@@ -3,8 +3,8 @@ package service
 import (
 	"encoding/json"
 	"fmt"
-	"weixin-golang/weixin-common/http"
-	"weixin-golang/weixin-mp/enpity"
+	"wx-golang/weixin-common/http"
+	"wx-golang/weixin-mp/enpity"
 )
 
 const (
@@ -19,20 +19,14 @@ const (
 // 设置所属行业
 func (w *WeChat) WxTemplateSetIndustry(industry enpity.WxIndustry) string {
 	reqUrl := fmt.Sprintf(set_industry_url, w.GetAccessToken())
-	msg, err := http.Post(reqUrl, industry.ToJson(industry))
-	if err != nil {
-		panic(err)
-	}
+	msg := http.Post(reqUrl, industry.ToJson(industry))
 	return string(msg)
 }
 
 // 获取设置的行业信息
 func (w *WeChat) WxTemplateGetIndustry() enpity.WxIndustryInfo {
 	reqUrl := fmt.Sprintf(get_industry_url, w.GetAccessToken())
-	msg, err := http.Get(reqUrl)
-	if err != nil {
-		panic(err)
-	}
+	msg := http.Get(reqUrl)
 	var industryInfo enpity.WxIndustryInfo
 	json.Unmarshal(msg, &industryInfo)
 	return industryInfo
@@ -47,10 +41,7 @@ func (w *WeChat) WxTemplateGetId(shortId string) string {
 	if err != nil {
 		panic(err)
 	}
-	msg, err := http.Post(reqUrl, string(body))
-	if err != nil {
-		panic(err)
-	}
+	msg := http.Post(reqUrl, string(body))
 	var responseBody map[string]string
 	json.Unmarshal(msg, &responseBody)
 	return responseBody["template_id"]
@@ -59,10 +50,7 @@ func (w *WeChat) WxTemplateGetId(shortId string) string {
 // 获取模板列表
 func (w *WeChat) WxTemplateGetTemplateList() enpity.WxTemplateList {
 	reqUrl := fmt.Sprintf(get_all_private_template, w.GetAccessToken())
-	msg, err := http.Get(reqUrl)
-	if err != nil {
-		panic(err)
-	}
+	msg := http.Get(reqUrl)
 	var respBody enpity.WxTemplateList
 	json.Unmarshal(msg, &respBody)
 	return respBody
@@ -75,10 +63,7 @@ func (w *WeChat) WxTemplateSendMsg(templateMsg enpity.WxTemplateMsg) map[string]
 	if err != nil {
 		panic(err)
 	}
-	msg, err := http.Post(reqUrl, string(reqBody))
-	if err != nil {
-		panic(err)
-	}
+	msg := http.Post(reqUrl, string(reqBody))
 	var respBody map[string]interface{}
 	json.Unmarshal(msg, &respBody)
 	return respBody

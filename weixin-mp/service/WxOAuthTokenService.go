@@ -6,9 +6,10 @@ import (
 	"net/url"
 	"sync"
 	"time"
-	"weixin-golang/weixin-common/http"
-	"weixin-golang/weixin-common/wxconsts"
-	"weixin-golang/weixin-mp/enpity"
+	"wx-golang/weixin-common/http"
+	"wx-golang/weixin-common/wxconsts"
+	"wx-golang/weixin-mp/enpity"
+	my_error "wx-golang/weixin-common/error"
 )
 
 const (
@@ -87,7 +88,10 @@ func isOAuthExpires() bool {
 func (w *WeChat)VerifyToken(openid string) bool {
 	reqUrl := fmt.Sprintf(verify_oauth_token, w.GetOAuthToken(), openid)
 	result := http.Get(reqUrl)
-	return false
+	var returnCode my_error.WxMpError
+	my_error.WxMpErrorFromByte(result, nil)
+	json.Unmarshal(result, &returnCode)
+	return returnCode.Errcode == 0
 }
 
 // 拉去openid所对应的用户信息

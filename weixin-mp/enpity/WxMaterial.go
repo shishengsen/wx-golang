@@ -34,6 +34,12 @@ type VideoMaterialDesc struct {
 	Introduction		string				`json:"introduction"`
 }
 
+type VideoPermanentMaterial struct {
+	Title				string				`json:"title"`
+	Description			string				`json:"description"`
+	DownUrl				string				`json:"down_url"`
+}
+
 func (n *NewsMaterial)ToJson(material NewsMaterial) string {
 	newsJson, err := json.Marshal(material)
 	if err != nil {
