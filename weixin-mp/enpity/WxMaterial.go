@@ -2,16 +2,19 @@ package enpity
 
 import "encoding/json"
 
+//
 type TempMaterial struct {
 	Type			string				`json:"type"`
 	MediaId			string				`json:"media_id"`
 	CreateAt		string				`json:"create_at"`
 }
 
+//
 type NewsMaterial struct {
 	Articles			[]NewsArticle		`json:"articles"`
 }
 
+//
 type NewsArticle struct {
 	Title				string				`json:"title"`
 	ThumbMediaId		string				`json:"thumb_media_id"`
@@ -34,10 +37,18 @@ type VideoMaterialDesc struct {
 	Introduction		string				`json:"introduction"`
 }
 
+//
 type VideoPermanentMaterial struct {
 	Title				string				`json:"title"`
 	Description			string				`json:"description"`
 	DownUrl				string				`json:"down_url"`
+}
+
+type MaterialTotalNum struct {
+	VoiceCount			int64				`json:"voice_count"`
+	VideoCount			int64				`json:"video_count"`
+	ImageCount			int64				`json:"image_count"`
+	NewsCount			int64				`json:"news_count"`
 }
 
 func (n *NewsMaterial)ToJson(material NewsMaterial) string {

@@ -25,6 +25,10 @@ const (
 	 */
 	add_news_material			=			"https://api.weixin.qq.com/cgi-bin/material/add_news?access_token=%s"
 	/**
+	更新图文素材
+	 */
+	update_news_material		=			"https://api.weixin.qq.com/cgi-bin/material/update_news?access_token=%s"
+	/**
 	上传图文消息内的图片获取URL
 	 */
 	upload_news_pic				=			"https://api.weixin.qq.com/cgi-bin/media/uploadimg?access_token=%s"
@@ -44,6 +48,14 @@ const (
 	删除永久素材
 	 */
 	delete_material        		=			"https://api.weixin.qq.com/cgi-bin/material/del_material?access_token=%s"
+	/**
+	获取素材总数
+	 */
+	get_material_total_nums		=			"https://api.weixin.qq.com/cgi-bin/material/get_materialcount?access_token=%s"
+	/**
+	获取素材列表
+	 */
+	get_material_list			=			"https://api.weixin.qq.com/cgi-bin/material/batchget_material?access_token=%s"
 )
 
 // 增加临时素材
@@ -117,6 +129,15 @@ func (w *WeChat)AddNewsMaterial(newsMaterial enpity.NewsMaterial) enpity.TempMat
 	var material enpity.TempMaterial
 	json.Unmarshal(msg, &material)
 	return material
+}
+
+// 对永久图文素材进行修改
+func (w *WeChat)UpdateNewsMaterial(newsMaterial enpity.NewsMaterial) bool {
+	reqUrl := fmt.Sprintf(update_news_material, w.GetAccessToken())
+	reqBody := newsMaterial.ToJson(newsMaterial)
+	msg := http.Post(reqUrl, reqBody)
+	wxerr.WxMpErrorFromByte(msg, nil)
+	return true
 }
 
 // 上传图文消息内的图片获取URL
@@ -213,4 +234,22 @@ func (w *WeChat)DeleteMaterial(mediaId string) bool {
 	result := http.Post(reqUrl, string(bodyByte))
 	wxerr.WxMpErrorFromByte(result, nil)
 	return true
+}
+
+// 获取素材总数
+func (w *WeChat)GetMaterialTotalNum() enpity.MaterialTotalNum {
+	reqUrl := fmt.Sprintf(get_material_total_nums, w.GetAccessToken())
+	msg := http.Get(reqUrl)
+	wxerr.WxMpErrorFromByte(msg, nil)
+	var totalNum enpity.MaterialTotalNum
+	err := json.Unmarshal(msg, &totalNum)
+	if err != nil {
+		panic(err)
+	}
+	return totalNum
+}
+
+// TODO
+func (w *WeChat)GetMaterialList(materialType, offset, count int32) {
+
 }

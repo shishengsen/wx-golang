@@ -9,7 +9,7 @@ import (
 	"wx-golang/weixin-common/http"
 	"wx-golang/weixin-common/wxconsts"
 	"wx-golang/weixin-mp/enpity"
-	my_error "wx-golang/weixin-common/error"
+	wxerr "wx-golang/weixin-common/error"
 )
 
 const (
@@ -84,24 +84,23 @@ func isOAuthExpires() bool {
 }
 
 // 检验授权凭证（access_token）是否有效
-//TODO
 func (w *WeChat)VerifyToken(openid string) bool {
 	reqUrl := fmt.Sprintf(verify_oauth_token, w.GetOAuthToken(), openid)
 	result := http.Get(reqUrl)
-	var returnCode my_error.WxMpError
-	my_error.WxMpErrorFromByte(result, nil)
+	var returnCode wxerr.WxMpError
+	wxerr.WxMpErrorFromByte(result, nil)
 	json.Unmarshal(result, &returnCode)
 	return returnCode.Errcode == 0
 }
 
-// 拉去openid所对应的用户信息
-func (w *WeChat)WxPullUserInfo(openid, lang string) enpity.WxOpUser {
+// 获取openid所对应的用户信息
+func (w *WeChat)WxPullUserInfo(openid, lang string) enpity.WxMpUser {
 	if lang == "" {
 		lang = wxconsts.LANG_ZH_CN
 	}
 	reqUrl := fmt.Sprintf(pull_user_info_url, w.GetOAuthToken(), openid, lang)
 	resp := http.Get(reqUrl)
-	var opUser enpity.WxOpUser
+	var opUser enpity.WxMpUser
 	json.Unmarshal(resp, &opUser)
 	return opUser
 }
