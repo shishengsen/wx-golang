@@ -12,7 +12,7 @@ import (
 	"strings"
 )
 
-// post文本数据提交
+// post纯文本数据提交
 func Post(url string, body string) ([]byte) {
 	resp, err := http.Post(url, "application/json", strings.NewReader(body))
 	if err != nil {
@@ -26,11 +26,12 @@ func Post(url string, body string) ([]byte) {
 	return result
 }
 
-// post文件数据提交
+// post纯媒体数据提交
 func PostWithFile(url string, file *os.File) ([]byte) {
 	return PostWithFileAndBody(url, "", file)
 }
 
+// post文件表单
 func PostWithFileAndBody(url, body string, file *os.File) ([]byte) {
 	bodyBuf := &bytes.Buffer{}
 	bodyWriter := multipart.NewWriter(bodyBuf)
@@ -69,7 +70,7 @@ func PostWithFileAndBody(url, body string, file *os.File) ([]byte) {
 	return result
 }
 
-// get接口使用
+// get请求
 func Get(url string) ([]byte) {
 	resp, err := http.Get(url)
 	if err != nil {

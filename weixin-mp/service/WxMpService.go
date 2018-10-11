@@ -171,3 +171,5 @@ func (w *WeChat)CreateJsapiSignature(url string) enpity.WxJsConfig {
 		Signature: signature,
 	}
 }
+
+// 生成带参数的二维码

@@ -3,6 +3,7 @@ package service
 import (
 	"encoding/json"
 	"fmt"
+	"strings"
 	"wx-golang/weixin-common/http"
 	wxerr "wx-golang/weixin-common/error"
 	"wx-golang/weixin-mp/enpity"
@@ -41,6 +42,22 @@ const (
 	获取用户身上的标签列表
 	 */
 	mp_user_own_labels			=			"https://api.weixin.qq.com/cgi-bin/tags/getidlist?access_token=%s"
+	/**
+	获取用户基本信息（包括UnionID机制）
+	 */
+	 mp_user_info_base			=			"https://api.weixin.qq.com/cgi-bin/user/info?access_token=%s&openid=%s&lang=%s"
+	/**
+	批量获取用户基本信息
+	 */
+	mp_user_info_base_list		=			"https://api.weixin.qq.com/cgi-bin/user/info/batchget?access_token=%s"
+	/**
+	获取用户列表
+	 */
+	mp_user_list				=			"https://api.weixin.qq.com/cgi-bin/user/get?access_token=%s"
+	/**
+	获取公众号的黑名单列表
+	 */
+	mp_user_black_list			=			"https://api.weixin.qq.com/cgi-bin/tags/members/getblacklist?access_token=%s"
 )
 
 // 创建标签
@@ -92,11 +109,11 @@ func (w *WeChat)WxMpUserLabelDelete(id int32) bool {
 }
 
 // 获取标签下粉丝列表
-func (w *WeChat)WxMpLabelFansList() enpity.LabelFans {
+func (w *WeChat)WxMpLabelFansList() enpity.OpenIdList {
 	reqUrl := fmt.Sprintf(label_fans_list, w.GetAccessToken())
 	msg := http.Get(reqUrl)
 	wxerr.WxMpErrorFromByte(msg, nil)
-	var fans enpity.LabelFans
+	var fans enpity.OpenIdList
 	err := json.Unmarshal(msg, &fans)
 	if err != nil {
 		panic(err)
@@ -128,6 +145,73 @@ func (w *WeChat)WxMpUserOwnLabels(openId string) []string {
 		panic(err)
 	}
 	return result["tagid_list"]
+}
+
+// 获取用户基本信息（包括UnionID机制）
+func (w *WeChat)GetWxMpUserInfoByUUID(openId string) enpity.WxMpUserInfoBase {
+	reqUrl := fmt.Sprintf(mp_user_info_base, w.GetAccessToken(), openId, w.Cfg.Lang)
+	msg := http.Get(reqUrl)
+	wxerr.WxMpErrorFromByte(msg, nil)
+	var userBaseInfo enpity.WxMpUserInfoBase
+	err := json.Unmarshal(msg, &userBaseInfo)
+	if err != nil {
+		panic(err)
+	}
+	return userBaseInfo
+}
+
+// 批量获取用户基本信息
+func (w *WeChat)GetWxMpUserInfoList(openIds []string) []enpity.WxMpUserInfoBase {
+	reqUrl := fmt.Sprintf(mp_user_info_base_list, w.GetAccessToken())
+	userList := make([]map[string]string, len(openIds))
+	for i := range openIds {
+		_tmp := map[string]string{
+			"openid": openIds[i],
+			"lang": w.Cfg.Lang,
+		}
+		userList = append(userList, _tmp)
+	}
+	bodyByte, err := json.Marshal(userList)
+	if err != nil {
+		panic(err)
+	}
+	msg := http.Post(reqUrl, string(bodyByte))
+	wxerr.WxMpErrorFromByte(msg, nil)
+	var userInfoBases []enpity.WxMpUserInfoBase
+	err = json.Unmarshal(msg, &userInfoBases)
+	if err != nil {
+		panic(err)
+	}
+	return userInfoBases
+}
+
+// 获取用户列表
+func (w *WeChat)GetWxMpUserList(nextOpenId string) enpity.WxMpUserList {
+	reqUrl := fmt.Sprintf(mp_user_list, w.GetAccessToken())
+	if strings.Compare(nextOpenId, "") != 0 {
+		reqUrl += "&next_openid=" + nextOpenId
+	}
+	msg := http.Get(reqUrl)
+	wxerr.WxMpErrorFromByte(msg, nil)
+	var userList enpity.WxMpUserList
+	err := json.Unmarshal(msg, &userList)
+	if err != nil {
+		panic(err)
+	}
+	return userList
+}
+
+// 获取公众号的黑名单列表
+func (w *WeChat)GetWxMpUserBlacklist(openId string) enpity.OpenIdList {
+	reqUrl := fmt.Sprintf(mp_user_black_list, w.GetAccessToken())
+	msg := http.Post(reqUrl, "{\"begin_openid\":" + openId + "}")
+	wxerr.WxMpErrorFromByte(msg, nil)
+	var blacklist enpity.OpenIdList
+	err := json.Unmarshal(msg, &blacklist)
+	if err != nil {
+		panic(err)
+	}
+	return blacklist
 }
 
 func mpUserBatchLabel(reqUrl string, openIds []string, tagId int32) bool {

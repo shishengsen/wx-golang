@@ -11,10 +11,10 @@ const (
 
 //
 type MpConfig struct {
-	AppId  string `validate:"gt=0"`
-	Secret string `validate:"gt=0"`
-	Token  string `validate:"gt=0"`
-	AesKey string `validate:"gt=0"`
+	AppId  						string `validate:"gt=0"`
+	Secret 						string `validate:"gt=0"`
+	Token  						string `validate:"gt=0"`
+	AesKey 						string `validate:"gt=0"`
 
 	AccessToken            		string
 	AccessTokenExpiresTime 		int64
@@ -22,6 +22,7 @@ type MpConfig struct {
 	OAuthToken             		*WxOAuthAccessToken
 	JsApiTicket					*WxJsTicket
 	JsApiConfig					*WxJsConfig
+	Lang						string
 }
 
 // 结构体参数验证
