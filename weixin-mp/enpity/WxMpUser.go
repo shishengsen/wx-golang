@@ -12,10 +12,18 @@ type WxMpUser struct {
 }
 
 type WxMpUserLabel struct {
-	Tags		[]Labels		`json:"tags"`
+	Tags		[]Label		`json:"tags"`
 }
 
-type Labels struct {
+type Label struct {
 	Id			string		`json:"id"`
 	Name		string		`json:"name"`
+}
+
+type LabelFans struct {
+	Count		int64			`json:"count"`
+	Data		struct{
+		Openid		[]string	`json:"openid"`
+	}							`json:"data"`
+	NextOpenid	string			`json:"next_openid"`
 }
