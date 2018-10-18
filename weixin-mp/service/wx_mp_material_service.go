@@ -8,6 +8,7 @@ import (
 	"wx-golang/weixin-common/http"
 	"wx-golang/weixin-common/wxconsts"
 	"wx-golang/weixin-mp/enpity"
+	"wx-golang/weixin-common/utils"
 	wxerr "wx-golang/weixin-common/error"
 )
 
@@ -104,7 +105,7 @@ func (w *WeChat) GetTempVideoMaterial(materialId string) string {
 	panic("Error:[未找到 video_url]")
 }
 
-//高清语音素材获取接口
+// 高清语音素材获取接口
 func (w *WeChat)GetHighSpeexMaterial(materialId string) *os.File {
 	reqUrl := fmt.Sprintf(get_material_from_js, w.GetAccessToken(), materialId)
 	voiceByte := http.Get(reqUrl)
@@ -207,16 +208,13 @@ func (w *WeChat)GetOtherPermanentMaterial(materialId string) *os.File {
 	return materialFile
 }
 
+//
 func getPermanentMaterial(materialId, accessToken string) []byte {
 	reqUrl := fmt.Sprintf(get_permanent_material, accessToken)
 	body := map[string]string {
 		"media_id": materialId,
 	}
-	bodyByte, err := json.Marshal(body)
-	if err != nil {
-		panic(err)
-	}
-	result := http.Post(reqUrl, string(bodyByte))
+	result := http.Post(reqUrl, string(utils.Interface2byte(body)))
 	wxerr.WxMpErrorFromByte(result, nil)
 	return result
 }
@@ -227,11 +225,7 @@ func (w *WeChat)DeleteMaterial(mediaId string) bool {
 	body := map[string]string {
 		"media_id": mediaId,
 	}
-	bodyByte, err := json.Marshal(body)
-	if err != nil {
-		panic(err)
-	}
-	result := http.Post(reqUrl, string(bodyByte))
+	result := http.Post(reqUrl, string(utils.Interface2byte(body)))
 	wxerr.WxMpErrorFromByte(result, nil)
 	return true
 }
@@ -249,7 +243,38 @@ func (w *WeChat)GetMaterialTotalNum() enpity.MaterialTotalNum {
 	return totalNum
 }
 
-// TODO
-func (w *WeChat)GetMaterialList(materialType, offset, count int32) {
+// 获取永久图文消息素材列表
+func (w *WeChat) GetNewsMaterialList(offset, count int64) enpity.NewsMaterialList {
+	reqUrl := fmt.Sprintf(get_material_list, w.GetAccessToken())
+	body := map[string]interface{} {
+		"type": wxconsts.MATERIAL_NEWS,
+		"offset": offset,
+		"count": count,
+	}
+	msg := http.Post(reqUrl, string(utils.Interface2byte(body)))
+	wxerr.WxMpErrorFromByte(msg, nil)
+	var result enpity.NewsMaterialList
+	err := json.Unmarshal(msg, &result)
+	if err != nil {
+		panic(err)
+	}
+	return result
+}
 
+// 获取其他类型（图片、语音、视频）素材列表
+func (w *WeChat) GetOtherMaterialList(materialType string, offset, count int64) enpity.OtherMaterialList {
+	reqUrl := fmt.Sprintf(get_material_list, w.GetAccessToken())
+	body := map[string]interface{} {
+		"type": materialType,
+		"offset": offset,
+		"count": count,
+	}
+	msg := http.Post(reqUrl, string(utils.Interface2byte(body)))
+	wxerr.WxMpErrorFromByte(msg, nil)
+	var result enpity.OtherMaterialList
+	err := json.Unmarshal(msg, &result)
+	if err != nil {
+		panic(err)
+	}
+	return result
 }

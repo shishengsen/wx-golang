@@ -2,6 +2,7 @@ package enpity
 
 import (
 	"gopkg.in/go-playground/validator.v9"
+	"sync"
 )
 
 const (
@@ -23,6 +24,10 @@ type MpConfig struct {
 	JsApiTicket					*WxJsTicket
 	JsApiConfig					*WxJsConfig
 	Lang						string
+
+	AccessTokenLock				*sync.Cond
+	JsapiTicketLock				*sync.Cond
+
 }
 
 // 结构体参数验证

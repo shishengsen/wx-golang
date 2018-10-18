@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"encoding/json"
 	"math/rand"
 )
 
@@ -14,4 +15,20 @@ func RandomStr() string {
 		finalStr += RANDOM_STR[rand.Intn(len(RANDOM_STR))]
 	}
 	return finalStr
+}
+
+func Interface2byte(itf interface{}) []byte {
+	data, err := json.Marshal(itf)
+	if err != nil {
+		panic(err)
+	}
+	return data
+}
+
+func Byte2Inteface(data []byte, e *interface{}) interface{} {
+	err := json.Unmarshal(data, e)
+	if err != nil {
+		panic(err)
+	}
+	return *e
 }

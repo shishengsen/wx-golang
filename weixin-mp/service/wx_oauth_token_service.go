@@ -22,7 +22,7 @@ const (
 
 // 根据 code 获取access_token
 func (w *WeChat) getOAuthAccessToken(code string) enpity.WxOAuthAccessToken {
-	reqUrl := fmt.Sprintf(oauth_access_token_url, w.Cfg.AppId, w.Cfg.Secret, code)
+	reqUrl := fmt.Sprintf(oauth_access_token_url, w.cfg.AppId, w.cfg.Secret, code)
 	msg := http.Get(reqUrl)
 	var oauth enpity.WxOAuthAccessToken
 	json.Unmarshal(msg, &oauth)
@@ -39,9 +39,9 @@ func (w *WeChat) GetOAuthTokenByCode(code string) enpity.WxOAuthAccessToken {
 
 // 对外暴露的微信网页授权的accessToken
 func (w *WeChat) GetOAuthToken() string {
-	if w.Cfg.OAuthToken != nil {
+	if w.cfg.OAuthToken != nil {
 		if !isOAuthExpires(){
-			return w.Cfg.OAuthToken.OauthAccessToken
+			return w.cfg.OAuthToken.OauthAccessToken
 		}
 	}
 	return refreshOAuthToken().OauthAccessToken
@@ -53,15 +53,15 @@ func (w *WeChat) Oauth2buildAuthorizationUrl(redirectURI string, scope string, s
 	if err != nil {
 		panic(err)
 	}
-	authorizeUrl := fmt.Sprintf(authorize_url, w.Cfg.AppId, redirectURI, scope, state)
+	authorizeUrl := fmt.Sprintf(authorize_url, w.cfg.AppId, redirectURI, scope, state)
 	return authorizeUrl
 }
 
 // 刷新token信息
 func refreshOAuthToken() enpity.WxOAuthAccessToken {
 	weChat := GetWeChat()
-	if weChat.Cfg.OAuthToken.IsExpires {
-		reqUrl := fmt.Sprintf(oauth_refresh_token_url, weChat.Cfg.AppId, weChat.Cfg.OAuthToken.OauthRefreshToken)
+	if weChat.cfg.OAuthToken.IsExpires {
+		reqUrl := fmt.Sprintf(oauth_refresh_token_url, weChat.cfg.AppId, weChat.cfg.OAuthToken.OauthRefreshToken)
 		msg := http.Get(reqUrl)
 		var oauth enpity.WxOAuthAccessToken
 		json.Unmarshal(msg, &oauth)
@@ -70,15 +70,15 @@ func refreshOAuthToken() enpity.WxOAuthAccessToken {
 		weChat.wxOAuthTokenStoreInMem(&oauth)
 		return oauth
 	}
-	return *weChat.Cfg.OAuthToken
+	return *weChat.cfg.OAuthToken
 }
 
 // 判断是否过期
 func isOAuthExpires() bool {
 	lock := sync.NewCond(new(sync.Mutex))
 	lock.L.Lock()
-	isExpires := GetWeChat().Cfg.OAuthToken.ExpiresIn-200 < time.Now().Unix()
-	GetWeChat().Cfg.OAuthToken.IsExpires = isExpires
+	isExpires := GetWeChat().cfg.OAuthToken.ExpiresIn-200 < time.Now().Unix()
+	GetWeChat().cfg.OAuthToken.IsExpires = isExpires
 	lock.L.Unlock()
 	return isExpires
 }

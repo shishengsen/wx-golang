@@ -5,8 +5,9 @@ import (
 	"fmt"
 	"strings"
 	"wx-golang/weixin-common/http"
-	wxerr "wx-golang/weixin-common/error"
 	"wx-golang/weixin-mp/enpity"
+	"wx-golang/weixin-common/utils"
+	wxerr "wx-golang/weixin-common/error"
 )
 
 const (
@@ -90,11 +91,7 @@ func (w *WeChat)WxMpUserLabelList() enpity.WxMpUserLabel {
 // 编辑标签
 func (w *WeChat)WxMpUserLabelUpdate(label enpity.Label) bool {
 	reqUrl := fmt.Sprintf(mp_label_update, w.GetAccessToken())
-	body, err := json.Marshal(label)
-	if err != nil {
-		panic(err)
-	}
-	msg := http.Post(reqUrl, string(body))
+	msg := http.Post(reqUrl, string(utils.Interface2byte(label)))
 	wxerr.WxMpErrorFromByte(msg, nil)
 	return true
 }
@@ -149,7 +146,7 @@ func (w *WeChat)WxMpUserOwnLabels(openId string) []string {
 
 // 获取用户基本信息（包括UnionID机制）
 func (w *WeChat)GetWxMpUserInfoByUUID(openId string) enpity.WxMpUserInfoBase {
-	reqUrl := fmt.Sprintf(mp_user_info_base, w.GetAccessToken(), openId, w.Cfg.Lang)
+	reqUrl := fmt.Sprintf(mp_user_info_base, w.GetAccessToken(), openId, w.cfg.Lang)
 	msg := http.Get(reqUrl)
 	wxerr.WxMpErrorFromByte(msg, nil)
 	var userBaseInfo enpity.WxMpUserInfoBase
@@ -167,18 +164,14 @@ func (w *WeChat)GetWxMpUserInfoList(openIds []string) []enpity.WxMpUserInfoBase 
 	for i := range openIds {
 		_tmp := map[string]string{
 			"openid": openIds[i],
-			"lang": w.Cfg.Lang,
+			"lang": w.cfg.Lang,
 		}
 		userList = append(userList, _tmp)
 	}
-	bodyByte, err := json.Marshal(userList)
-	if err != nil {
-		panic(err)
-	}
-	msg := http.Post(reqUrl, string(bodyByte))
+	msg := http.Post(reqUrl, string(utils.Interface2byte(userList)))
 	wxerr.WxMpErrorFromByte(msg, nil)
 	var userInfoBases []enpity.WxMpUserInfoBase
-	err = json.Unmarshal(msg, &userInfoBases)
+	err := json.Unmarshal(msg, &userInfoBases)
 	if err != nil {
 		panic(err)
 	}

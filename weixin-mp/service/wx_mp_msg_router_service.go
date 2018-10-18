@@ -4,16 +4,6 @@ import (
 	"wx-golang/weixin-mp/enpity"
 )
 
-const (
-	MSG_TYPR_TEXT			=		"text"
-	MSG_TYPE_IMAGE			=		"image"
-	MSG_TYPE_VOICE			=		"voice"
-	MSG_TYPE_VIDEO			=		"video"
-	MSG_TYPE_SHORT_VIDEO	=		"shortvideo"
-	MSG_TYPE_LOCATION		=		"location"
-	MSG_TYPE_LINK			=		"link"
-	MSG_TYPE_EVENT			=		"event"
-)
 
 var handlerMap map[string]*enpity.MsgRouter
 

@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"wx-golang/weixin-common/http"
 	"wx-golang/weixin-mp/enpity"
+	"wx-golang/weixin-common/utils"
 )
 
 const (
@@ -35,13 +36,10 @@ func (w *WeChat) WxTemplateGetIndustry() enpity.WxIndustryInfo {
 // 获得模板ID
 func (w *WeChat) WxTemplateGetId(shortId string) string {
 	reqUrl := fmt.Sprintf(add_template_url, w.GetAccessToken())
-	body, err := json.Marshal(map[string]string{
+	body := map[string]string{
 		"template_id_short": shortId,
-	})
-	if err != nil {
-		panic(err)
 	}
-	msg := http.Post(reqUrl, string(body))
+	msg := http.Post(reqUrl, string(utils.Interface2byte(body)))
 	var responseBody map[string]string
 	json.Unmarshal(msg, &responseBody)
 	return responseBody["template_id"]
@@ -59,11 +57,7 @@ func (w *WeChat) WxTemplateGetTemplateList() enpity.WxTemplateList {
 // 发送模板消息
 func (w *WeChat) WxTemplateSendMsg(templateMsg enpity.WxTemplateMsg) map[string]interface{} {
 	reqUrl := fmt.Sprintf(send_template_msg, w.GetAccessToken())
-	reqBody, err := json.Marshal(templateMsg)
-	if err != nil {
-		panic(err)
-	}
-	msg := http.Post(reqUrl, string(reqBody))
+	msg := http.Post(reqUrl, string(utils.Interface2byte(templateMsg)))
 	var respBody map[string]interface{}
 	json.Unmarshal(msg, &respBody)
 	return respBody
