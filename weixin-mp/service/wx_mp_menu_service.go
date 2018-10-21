@@ -21,13 +21,13 @@ func (w *WeChat) WxMpCreateMenu(wxMenu enpity.WxMenu) {
 
 // 自定义菜单创建接口()
 func (w *WeChat) WxMpCreateMenuByJson(menuJson string) {
-	reqUrl := fmt.Sprintf(create_menu, w.GetAccessToken())
+	reqUrl := fmt.Sprintf(create_menu, w.WxGetAccessToken())
 	createMenu(reqUrl, menuJson)
 }
 
 // 自定义菜单查询接口
 func (w *WeChat) WxMpQueryMenu() enpity.WxMenu {
-	reqUrl := fmt.Sprintf(query_menu, w.GetAccessToken())
+	reqUrl := fmt.Sprintf(query_menu, w.WxGetAccessToken())
 	msg := http.Get(reqUrl)
 	var menu enpity.WxMenu
 	json.Unmarshal(msg, &menu)
@@ -36,7 +36,7 @@ func (w *WeChat) WxMpQueryMenu() enpity.WxMenu {
 
 // 自定义菜单删除接口
 func (w *WeChat) WxMpDeleteMenu() string {
-	reqUrl := fmt.Sprintf(delete_menu, w.GetAccessToken())
+	reqUrl := fmt.Sprintf(delete_menu, w.WxGetAccessToken())
 	msg := http.Get(reqUrl)
 	return string(msg)
 }

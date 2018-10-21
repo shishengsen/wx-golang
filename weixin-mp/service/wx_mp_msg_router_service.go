@@ -4,21 +4,19 @@ import (
 	"wx-golang/weixin-mp/enpity"
 )
 
-
-var handlerMap map[string]*enpity.MsgRouter
-
 // 微信消息通知路由分发
+// 将自定义的微信路由处理函数装入map结构中
 func (w *WeChat) RouterInit(msgRouters map[string]*enpity.MsgRouter) {
-	handlerMap = msgRouters
+	w.handlerMap = msgRouters
 }
 
 // 路由分发，
 func (w *WeChat) RouterSwitchHandler(msg enpity.WxMessage) {
-	if &handlerMap == nil {
+	if &(w.handlerMap) == nil {
 		panic("微信消息路由对象为空")
 	}
 	msgType := msg.MsgType
-	router := handlerMap[msgType]
+	router := w.handlerMap[msgType]
 	(*router).Handler(msg)
 }
 

@@ -76,6 +76,9 @@ func Get(url string) ([]byte) {
 	if err != nil {
 		panic(err)
 	}
+	if resp.StatusCode != 200 {
+
+	}
 	defer resp.Body.Close()
 	result, err := ioutil.ReadAll(resp.Body)
 	if err != nil {

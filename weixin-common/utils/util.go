@@ -2,7 +2,14 @@ package utils
 
 import (
 	"encoding/json"
+	"github.com/satori/go.uuid"
 	"math/rand"
+	"net/url"
+	"os"
+)
+
+const (
+	temp_file_path		=		"/tmp/wx-go/"
 )
 
 var RANDOM_STR []string = []string{"a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u",
@@ -31,4 +38,33 @@ func Byte2Inteface(data []byte, e *interface{}) interface{} {
 		panic(err)
 	}
 	return *e
+}
+
+func UrlEncode(s string) string {
+	finalUrl, err := url.QueryUnescape(s)
+	if err != nil {
+		panic(err)
+	}
+	return finalUrl
+}
+
+func CreateTempFile(data []byte) *os.File {
+	tmpFile, outputError := os.OpenFile(tempFilePath(), os.O_WRONLY|os.O_CREATE, 0666)
+	if outputError != nil {
+		panic(outputError)
+	}
+	_, err := tmpFile.Write(data)
+	if err != nil {
+		panic(err)
+	}
+	return tmpFile
+}
+
+func tempFilePath() string {
+	_u, err := uuid.NewV4()
+	if err != nil {
+		panic(err)
+	}
+	return temp_file_path + _u.String()
+
 }

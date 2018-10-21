@@ -3,13 +3,13 @@ package service
 import (
 	"encoding/json"
 	"fmt"
-	"net/url"
 	"sync"
 	"time"
+	wxerr "wx-golang/weixin-common/error"
 	"wx-golang/weixin-common/http"
+	"wx-golang/weixin-common/utils"
 	"wx-golang/weixin-common/wxconsts"
 	"wx-golang/weixin-mp/enpity"
-	wxerr "wx-golang/weixin-common/error"
 )
 
 const (
@@ -20,8 +20,51 @@ const (
 	verify_oauth_token      = "https://api.weixin.qq.com/sns/auth?access_token=%s&openid=%s"
 )
 
+// 对外暴露的微信网页授权根据code获取accessToken
+func (w *WeChat) WxGetOAuthTokenByCode(code string) enpity.WxOAuthAccessToken {
+	return getOAuthAccessToken(code, *w)
+}
+
+// 对外暴露的微信网页授权的accessToken
+func (w *WeChat) WxGetOAuthToken() string {
+	if w.cfg.OAuthToken != nil {
+		if !isOAuthExpires(*w){
+			return w.cfg.OAuthToken.OauthAccessToken
+		}
+	}
+	return refreshOAuthToken(*w).OauthAccessToken
+}
+
+// 对外暴露用户授权链接生成接口
+func (w *WeChat) WxOauth2buildAuthorizationUrl(redirectURI string, scope string, state string) string {
+	return fmt.Sprintf(authorize_url, w.cfg.AppId, utils.UrlEncode(redirectURI), scope, state)
+}
+
+
+// 检验授权凭证（access_token）是否有效
+func (w *WeChat) WxVerifyToken(openid string) bool {
+	reqUrl := fmt.Sprintf(verify_oauth_token, w.WxGetOAuthToken(), openid)
+	result := http.Get(reqUrl)
+	var returnCode wxerr.WxMpError
+	wxerr.WxMpErrorFromByte(result, nil)
+	json.Unmarshal(result, &returnCode)
+	return returnCode.Errcode == 0
+}
+
+// 获取openid所对应的用户信息
+func (w *WeChat) WxPullUserInfo(openid, lang string) enpity.WxMpUser {
+	if lang == "" {
+		lang = wxconsts.LANG_ZH_CN
+	}
+	reqUrl := fmt.Sprintf(pull_user_info_url, w.WxGetOAuthToken(), openid, lang)
+	resp := http.Get(reqUrl)
+	var opUser enpity.WxMpUser
+	json.Unmarshal(resp, &opUser)
+	return opUser
+}
+
 // 根据 code 获取access_token
-func (w *WeChat) getOAuthAccessToken(code string) enpity.WxOAuthAccessToken {
+func getOAuthAccessToken(code string, w WeChat) enpity.WxOAuthAccessToken {
 	reqUrl := fmt.Sprintf(oauth_access_token_url, w.cfg.AppId, w.cfg.Secret, code)
 	msg := http.Get(reqUrl)
 	var oauth enpity.WxOAuthAccessToken
@@ -32,76 +75,27 @@ func (w *WeChat) getOAuthAccessToken(code string) enpity.WxOAuthAccessToken {
 	return oauth
 }
 
-// 对外暴露的微信网页授权根据code获取accessToken
-func (w *WeChat) GetOAuthTokenByCode(code string) enpity.WxOAuthAccessToken {
-	return w.getOAuthAccessToken(code)
-}
-
-// 对外暴露的微信网页授权的accessToken
-func (w *WeChat) GetOAuthToken() string {
-	if w.cfg.OAuthToken != nil {
-		if !isOAuthExpires(){
-			return w.cfg.OAuthToken.OauthAccessToken
-		}
-	}
-	return refreshOAuthToken().OauthAccessToken
-}
-
-// 对外暴露用户授权链接生成接口
-func (w *WeChat) Oauth2buildAuthorizationUrl(redirectURI string, scope string, state string) string {
-	redirectURI, err := url.QueryUnescape(redirectURI)
-	if err != nil {
-		panic(err)
-	}
-	authorizeUrl := fmt.Sprintf(authorize_url, w.cfg.AppId, redirectURI, scope, state)
-	return authorizeUrl
+// 判断是否过期
+func isOAuthExpires(wx WeChat) bool {
+	lock := sync.NewCond(new(sync.Mutex))
+	lock.L.Lock()
+	isExpires := wx.cfg.OAuthToken.ExpiresIn-200 < time.Now().Unix()
+	wx.cfg.OAuthToken.IsExpires = isExpires
+	lock.L.Unlock()
+	return isExpires
 }
 
 // 刷新token信息
-func refreshOAuthToken() enpity.WxOAuthAccessToken {
-	weChat := GetWeChat()
-	if weChat.cfg.OAuthToken.IsExpires {
-		reqUrl := fmt.Sprintf(oauth_refresh_token_url, weChat.cfg.AppId, weChat.cfg.OAuthToken.OauthRefreshToken)
+func refreshOAuthToken(wx WeChat) enpity.WxOAuthAccessToken {
+	if wx.cfg.OAuthToken.IsExpires {
+		reqUrl := fmt.Sprintf(oauth_refresh_token_url, wx.cfg.AppId, wx.cfg.OAuthToken.OauthRefreshToken)
 		msg := http.Get(reqUrl)
 		var oauth enpity.WxOAuthAccessToken
 		json.Unmarshal(msg, &oauth)
 		oauth.ExpiresIn += +time.Now().Unix()
 		oauth.IsExpires = false
-		weChat.wxOAuthTokenStoreInMem(&oauth)
+		wx.wxOAuthTokenStoreInMem(&oauth)
 		return oauth
 	}
-	return *weChat.cfg.OAuthToken
+	return *wx.cfg.OAuthToken
 }
-
-// 判断是否过期
-func isOAuthExpires() bool {
-	lock := sync.NewCond(new(sync.Mutex))
-	lock.L.Lock()
-	isExpires := GetWeChat().cfg.OAuthToken.ExpiresIn-200 < time.Now().Unix()
-	GetWeChat().cfg.OAuthToken.IsExpires = isExpires
-	lock.L.Unlock()
-	return isExpires
-}
-
-// 检验授权凭证（access_token）是否有效
-func (w *WeChat)VerifyToken(openid string) bool {
-	reqUrl := fmt.Sprintf(verify_oauth_token, w.GetOAuthToken(), openid)
-	result := http.Get(reqUrl)
-	var returnCode wxerr.WxMpError
-	wxerr.WxMpErrorFromByte(result, nil)
-	json.Unmarshal(result, &returnCode)
-	return returnCode.Errcode == 0
-}
-
-// 获取openid所对应的用户信息
-func (w *WeChat)WxPullUserInfo(openid, lang string) enpity.WxMpUser {
-	if lang == "" {
-		lang = wxconsts.LANG_ZH_CN
-	}
-	reqUrl := fmt.Sprintf(pull_user_info_url, w.GetOAuthToken(), openid, lang)
-	resp := http.Get(reqUrl)
-	var opUser enpity.WxMpUser
-	json.Unmarshal(resp, &opUser)
-	return opUser
-}
-

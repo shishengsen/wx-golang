@@ -6,7 +6,13 @@ import (
 )
 
 const (
+	/**
+	测试所用
+	 */
 	secrst = "64ebc5c45e7531e88e9466ffb8435ff0"
+	/**
+	测试所用
+	 */
 	appid  = "wx797295c89a602103"
 )
 
@@ -25,8 +31,8 @@ type MpConfig struct {
 	JsApiConfig					*WxJsConfig
 	Lang						string
 
-	AccessTokenLock				*sync.Cond
-	JsapiTicketLock				*sync.Cond
+	AccessTokenLock				*sync.Cond			// 刷新微信授权码时需进行并发控制，防止过度刷新，需要整个config用一个锁
+	JsapiTicketLock				*sync.Cond			// 刷新微信jssdk的ticket时需进行并发控制，防止过度刷新，需要整个config用一个锁
 
 }
 
