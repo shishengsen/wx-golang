@@ -6,6 +6,7 @@ import (
 	"math/rand"
 	"net/url"
 	"os"
+	"time"
 )
 
 const (
@@ -66,5 +67,8 @@ func tempFilePath() string {
 		panic(err)
 	}
 	return temp_file_path + _u.String()
+}
 
+func TimeFormatToString(t time.Time) string {
+	return t.Format("2006-01-02 15:04:05")
 }
