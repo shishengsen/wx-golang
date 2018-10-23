@@ -67,6 +67,13 @@ func Sha1(params ...string) string {
 	return hex.EncodeToString(sha1.Sum([]byte("")))
 }
 
+//sha1签名(已拼接好的字符串)
+func Sha1WithAmple(str string) string {
+	sha1 := sha1.New()
+	sha1.Write([]byte(str))
+	return hex.EncodeToString(sha1.Sum([]byte("")))
+}
+
 // 微信消息加密
 func WxMsgAesEncrypt(cipherText string, aesKey string) string {
 	cipherByte := []byte(cipherText)
