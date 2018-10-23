@@ -23,6 +23,8 @@ type NewsArticle struct {
 	ShowCoverPic		int32				`json:"show_cover_pic"`
 	Content				string				`json:"content"`
 	ContentSourceUrl	string				`json:"content_source_url"`
+	NeedOpenComment		int32				`json:"need_open_comment,omitempty"`
+	OnlyFansCanComment	int32				`json:"only_fans_can_comment,omitempty"`
 }
 
 // 新增素材返回的对象信息

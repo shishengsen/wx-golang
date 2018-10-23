@@ -66,7 +66,6 @@ func (w *WeChat)WxMpUserCreateLabel(name string) string {
 	reqUrl := fmt.Sprintf(mp_create_label, w.WxGetAccessToken())
 	body := "{\"tag\":{\"name\":" + name + "}}"
 	msg := http.Post(reqUrl, body)
-	wxerr.WxMpErrorFromByte(msg, nil)
 	var label map[string]map[string]string
 	err := json.Unmarshal(msg, &label)
 	if err != nil {
@@ -79,7 +78,6 @@ func (w *WeChat)WxMpUserCreateLabel(name string) string {
 func (w *WeChat)WxMpUserLabelList() enpity.WxMpUserLabel {
 	reqUrl := fmt.Sprintf(mp_label_list, w.WxGetAccessToken())
 	msg := http.Get(reqUrl)
-	wxerr.WxMpErrorFromByte(msg, nil)
 	var labels enpity.WxMpUserLabel
 	err := json.Unmarshal(msg, &labels)
 	if err != nil {
@@ -92,7 +90,6 @@ func (w *WeChat)WxMpUserLabelList() enpity.WxMpUserLabel {
 func (w *WeChat)WxMpUserLabelUpdate(label enpity.Label) bool {
 	reqUrl := fmt.Sprintf(mp_label_update, w.WxGetAccessToken())
 	msg := http.Post(reqUrl, string(utils.Interface2byte(label)))
-	wxerr.WxMpErrorFromByte(msg, nil)
 	return true
 }
 
@@ -101,7 +98,6 @@ func (w *WeChat)WxMpUserLabelDelete(id int32) bool {
 	reqUrl := fmt.Sprintf(mp_label_delete, w.WxGetAccessToken())
 	body := "{\"tag\":{\"id\": " + string(id) + "}}"
 	msg := http.Post(reqUrl, body)
-	wxerr.WxMpErrorFromByte(msg, nil)
 	return true
 }
 
@@ -109,7 +105,6 @@ func (w *WeChat)WxMpUserLabelDelete(id int32) bool {
 func (w *WeChat)WxMpLabelFansList() enpity.OpenIdList {
 	reqUrl := fmt.Sprintf(label_fans_list, w.WxGetAccessToken())
 	msg := http.Get(reqUrl)
-	wxerr.WxMpErrorFromByte(msg, nil)
 	var fans enpity.OpenIdList
 	err := json.Unmarshal(msg, &fans)
 	if err != nil {
@@ -135,7 +130,6 @@ func (w *WeChat)WxMpUserOwnLabels(openId string) []string {
 	reqUrl := fmt.Sprintf(mp_user_own_labels, w.WxGetAccessToken())
 	body := "{\"openid\":" + openId + "}"
 	msg := http.Post(reqUrl, body)
-	wxerr.WxMpErrorFromByte(msg, nil)
 	var result map[string][]string
 	err := json.Unmarshal(msg, &result)
 	if err != nil {
@@ -148,7 +142,6 @@ func (w *WeChat)WxMpUserOwnLabels(openId string) []string {
 func (w *WeChat) WxMpGetUserInfoByUUID(openId string) enpity.WxMpUserInfoBase {
 	reqUrl := fmt.Sprintf(mp_user_info_base, w.WxGetAccessToken(), openId, w.cfg.Lang)
 	msg := http.Get(reqUrl)
-	wxerr.WxMpErrorFromByte(msg, nil)
 	var userBaseInfo enpity.WxMpUserInfoBase
 	err := json.Unmarshal(msg, &userBaseInfo)
 	if err != nil {
@@ -169,7 +162,6 @@ func (w *WeChat) WxMpGetUserInfoList(openIds []string) []enpity.WxMpUserInfoBase
 		userList = append(userList, _tmp)
 	}
 	msg := http.Post(reqUrl, string(utils.Interface2byte(userList)))
-	wxerr.WxMpErrorFromByte(msg, nil)
 	var userInfoBases []enpity.WxMpUserInfoBase
 	err := json.Unmarshal(msg, &userInfoBases)
 	if err != nil {
@@ -185,7 +177,6 @@ func (w *WeChat) WxMpGetUserList(nextOpenId string) enpity.WxMpUserList {
 		reqUrl += "&next_openid=" + nextOpenId
 	}
 	msg := http.Get(reqUrl)
-	wxerr.WxMpErrorFromByte(msg, nil)
 	var userList enpity.WxMpUserList
 	err := json.Unmarshal(msg, &userList)
 	if err != nil {
@@ -198,7 +189,6 @@ func (w *WeChat) WxMpGetUserList(nextOpenId string) enpity.WxMpUserList {
 func (w *WeChat) WxMpGetUserBlacklist(openId string) enpity.OpenIdList {
 	reqUrl := fmt.Sprintf(mp_user_black_list, w.WxGetAccessToken())
 	msg := http.Post(reqUrl, "{\"begin_openid\":" + openId + "}")
-	wxerr.WxMpErrorFromByte(msg, nil)
 	var blacklist enpity.OpenIdList
 	err := json.Unmarshal(msg, &blacklist)
 	if err != nil {
@@ -218,7 +208,6 @@ func mpUserBatchLabel(reqUrl string, openIds []string, tagId int32) bool {
 		panic(err)
 	}
 	msg := http.Post(reqUrl, string(bodyByte))
-	wxerr.WxMpErrorFromByte(msg, nil)
 	return true
 }
 

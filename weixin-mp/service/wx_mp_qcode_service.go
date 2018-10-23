@@ -60,7 +60,6 @@ func (w *WeChat) WxTicket2QCode(ticket string) *os.File {
 func qcodeRequest(w WeChat, body interface{}) enpity.WxQCode {
 	reqUrl := fmt.Sprintf(qcode_request, w.WxGetAccessToken())
 	msg := http.Post(reqUrl, string(utils.Interface2byte(body)))
-	wxerr.WxMpErrorFromByte(msg, nil)
 	var qCode enpity.WxQCode
 	err := json.Unmarshal(msg, &qCode)
 	if err != nil {

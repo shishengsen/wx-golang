@@ -6,10 +6,9 @@ import (
 	"github.com/satori/go.uuid"
 	"os"
 	"wx-golang/weixin-common/http"
+	"wx-golang/weixin-common/utils"
 	"wx-golang/weixin-common/wxconsts"
 	"wx-golang/weixin-mp/enpity"
-	"wx-golang/weixin-common/utils"
-	wxerr "wx-golang/weixin-common/error"
 )
 
 const (
@@ -57,13 +56,44 @@ const (
 	获取素材列表
 	 */
 	get_material_list			=			"https://api.weixin.qq.com/cgi-bin/material/batchget_material?access_token=%s"
+	/**
+	打开已群发文章评论
+	 */
+	get_comment_open			=			"https://api.weixin.qq.com/cgi-bin/comment/open?access_token=%s"
+	/**
+	关闭已群发文章评论
+	 */
+	close_comment				=			"https://api.weixin.qq.com/cgi-bin/comment/close?access_token=%s"
+	/**
+	查看指定文章的评论数据
+	 */
+	see_comment					=			"https://api.weixin.qq.com/cgi-bin/comment/list?access_token=%s"
+	/**
+	将评论标记精选
+	 */
+	mark_elect_comment			=			"https://api.weixin.qq.com/cgi-bin/comment/markelect?access_token=%s"
+	/**
+	取消评论精选
+	 */
+	cancle_elect_comment		=			"https://api.weixin.qq.com/cgi-bin/comment/unmarkelect?access_token=%s"
+	/**
+	删除评论
+	 */
+	delete_comment				=			"https://api.weixin.qq.com/cgi-bin/comment/delete?access_token=%s"
+	/**
+	回复评论
+	 */
+	reply_comment				=			"https://api.weixin.qq.com/cgi-bin/comment/reply/add?access_token=%s"
+	/**
+	删除回复
+	 */
+	delete_reply_comment		=			"https://api.weixin.qq.com/cgi-bin/comment/reply/delete?access_token=%s"
 )
 
 // 增加临时素材
 func (w *WeChat) WxAddTempMaterial(materialType string, file os.File) enpity.TempMaterial {
 	reqUrl := fmt.Sprintf(add_temp_material, w.WxGetAccessToken(), materialType)
 	msg := http.PostWithFile(reqUrl, &file)
-	wxerr.WxMpErrorFromByte(msg, nil)
 	var material enpity.TempMaterial
 	json.Unmarshal(msg, &material)
 	return material
@@ -73,7 +103,6 @@ func (w *WeChat) WxAddTempMaterial(materialType string, file os.File) enpity.Tem
 func (w *WeChat) WxGetTempNoVideoMaterial(materialId string) *os.File {
 	reqUrl := fmt.Sprintf(get_temp_material,  w.WxGetAccessToken(), materialId)
 	fileByte := http.Get(reqUrl)
-	wxerr.WxMpErrorFromByte(fileByte, nil)
 	_uuid, err := uuid.NewV4()
 	if err != nil {
 		panic(err)
@@ -93,7 +122,6 @@ func (w *WeChat) WxGetTempNoVideoMaterial(materialId string) *os.File {
 func (w *WeChat) WxGetTempVideoMaterial(materialId string) string {
 	reqUrl := fmt.Sprintf(get_temp_material,  w.WxGetAccessToken(), materialId)
 	result := http.Get(reqUrl)
-	wxerr.WxMpErrorFromByte(result, nil)
 	var tmp map[string]string
 	err := json.Unmarshal(result, &tmp)
 	if err != nil {
@@ -109,7 +137,6 @@ func (w *WeChat) WxGetTempVideoMaterial(materialId string) string {
 func (w *WeChat) WxGetHighSpeexMaterial(materialId string) *os.File {
 	reqUrl := fmt.Sprintf(get_material_from_js, w.WxGetAccessToken(), materialId)
 	voiceByte := http.Get(reqUrl)
-	wxerr.WxMpErrorFromByte(voiceByte, nil)
 	voiceFile, err := os.Create(materialId)
 	if err != nil {
 		panic(err)
@@ -126,7 +153,6 @@ func (w *WeChat) WxAddNewsMaterial(newsMaterial enpity.NewsMaterial) enpity.Temp
 	reqUrl := fmt.Sprintf(add_news_material, w.WxGetAccessToken())
 	reqBody := newsMaterial.ToJson(newsMaterial)
 	msg := http.Post(reqUrl, reqBody)
-	wxerr.WxMpErrorFromByte(msg, nil)
 	var material enpity.TempMaterial
 	json.Unmarshal(msg, &material)
 	return material
@@ -136,8 +162,7 @@ func (w *WeChat) WxAddNewsMaterial(newsMaterial enpity.NewsMaterial) enpity.Temp
 func (w *WeChat)UpdateNewsMaterial(newsMaterial enpity.NewsMaterial) bool {
 	reqUrl := fmt.Sprintf(update_news_material, w.WxGetAccessToken())
 	reqBody := newsMaterial.ToJson(newsMaterial)
-	msg := http.Post(reqUrl, reqBody)
-	wxerr.WxMpErrorFromByte(msg, nil)
+	http.Post(reqUrl, reqBody)
 	return true
 }
 
@@ -145,7 +170,6 @@ func (w *WeChat)UpdateNewsMaterial(newsMaterial enpity.NewsMaterial) bool {
 func (w *WeChat) WxUploadNewsMaterialPic(file os.File) string {
 	reqUrl := fmt.Sprintf(upload_news_pic, w.WxGetAccessToken())
 	msg := http.PostWithFile(reqUrl, &file)
-	wxerr.WxMpErrorFromByte(msg, nil)
 	var tmp map[string]string
 	json.Unmarshal(msg, &tmp)
 	return tmp["url"]
@@ -155,7 +179,6 @@ func (w *WeChat) WxUploadNewsMaterialPic(file os.File) string {
 func (w *WeChat) WxAddNoVideoPermanentMaterial(materialType string, file os.File) enpity.PermanentMaterial {
 	reqUrl := fmt.Sprintf(add_other_material, w.WxGetAccessToken(), materialType)
 	msg := http.PostWithFile(reqUrl, &file)
-	wxerr.WxMpErrorFromByte(msg, nil)
 	var result enpity.PermanentMaterial
 	json.Unmarshal(msg, &result)
 	return result
@@ -166,7 +189,6 @@ func (w *WeChat) WxAddVideoMaterial(file os.File, desc enpity.VideoMaterialDesc)
 	reqUrl := fmt.Sprintf(add_other_material, w.WxGetAccessToken(), wxconsts.TEMP_MATERIAL_VIDEO)
 	body := desc.ToJson(desc)
 	msg := http.PostWithFileAndBody(reqUrl, body, &file)
-	wxerr.WxMpErrorFromByte(msg, nil)
 	var result enpity.PermanentMaterial
 	json.Unmarshal(msg, &result)
 	return result
@@ -210,12 +232,11 @@ func (w *WeChat) WxGetOtherPermanentMaterial(materialId string) *os.File {
 
 // 删除永久素材
 func (w *WeChat) WxDeleteMaterial(mediaId string) bool {
-	reqUrl := fmt.Sprintf(get_permanent_material, w.WxGetAccessToken())
+	reqUrl := fmt.Sprintf(delete_material, w.WxGetAccessToken())
 	body := map[string]string {
 		"media_id": mediaId,
 	}
-	result := http.Post(reqUrl, string(utils.Interface2byte(body)))
-	wxerr.WxMpErrorFromByte(result, nil)
+	http.Post(reqUrl, string(utils.Interface2byte(body)))
 	return true
 }
 
@@ -223,7 +244,6 @@ func (w *WeChat) WxDeleteMaterial(mediaId string) bool {
 func (w *WeChat) WxGetMaterialTotalNum() enpity.MaterialTotalNum {
 	reqUrl := fmt.Sprintf(get_material_total_nums, w.WxGetAccessToken())
 	msg := http.Get(reqUrl)
-	wxerr.WxMpErrorFromByte(msg, nil)
 	var totalNum enpity.MaterialTotalNum
 	err := json.Unmarshal(msg, &totalNum)
 	if err != nil {
@@ -241,7 +261,6 @@ func (w *WeChat) WxGetNewsMaterialList(offset, count int64) enpity.NewsMaterialL
 		"count": count,
 	}
 	msg := http.Post(reqUrl, string(utils.Interface2byte(body)))
-	wxerr.WxMpErrorFromByte(msg, nil)
 	var result enpity.NewsMaterialList
 	err := json.Unmarshal(msg, &result)
 	if err != nil {
@@ -259,7 +278,6 @@ func (w *WeChat) WxGetOtherMaterialList(materialType string, offset, count int64
 		"count": count,
 	}
 	msg := http.Post(reqUrl, string(utils.Interface2byte(body)))
-	wxerr.WxMpErrorFromByte(msg, nil)
 	var result enpity.OtherMaterialList
 	err := json.Unmarshal(msg, &result)
 	if err != nil {
@@ -275,6 +293,5 @@ func getPermanentMaterial(materialId, accessToken string) []byte {
 		"media_id": materialId,
 	}
 	result := http.Post(reqUrl, string(utils.Interface2byte(body)))
-	wxerr.WxMpErrorFromByte(result, nil)
 	return result
 }

@@ -46,7 +46,6 @@ func (w *WeChat) WxVerifyToken(openid string) bool {
 	reqUrl := fmt.Sprintf(verify_oauth_token, w.WxGetOAuthToken(), openid)
 	result := http.Get(reqUrl)
 	var returnCode wxerr.WxMpError
-	wxerr.WxMpErrorFromByte(result, nil)
 	json.Unmarshal(result, &returnCode)
 	return returnCode.Errcode == 0
 }

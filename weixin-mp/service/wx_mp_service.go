@@ -157,7 +157,6 @@ func (w *WeChat) WxMakeShortLink(longUrl string) string {
 		"long_url": longUrl,
 	}
 	msg := http.Post(reqUrl, string(utils.Interface2byte(body)))
-	wxerr.WxMpErrorFromByte(msg, nil)
 	var result map[string]string
 	err := json.Unmarshal(msg, &result)
 	if err != nil {

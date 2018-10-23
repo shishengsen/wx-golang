@@ -10,6 +10,7 @@ import (
 	"net/http"
 	"os"
 	"strings"
+	wxErr "wx-golang/weixin-common/error"
 )
 
 // post纯文本数据提交
@@ -23,6 +24,7 @@ func Post(url string, body string) ([]byte) {
 	if err != nil {
 		panic(err)
 	}
+	wxErr.WxMpErrorFromByte(result, resp)
 	return result
 }
 
@@ -67,6 +69,7 @@ func PostWithFileAndBody(url, body string, file *os.File) ([]byte) {
 	if err != nil {
 		panic(err)
 	}
+	wxErr.WxMpErrorFromByte(result, resp)
 	return result
 }
 
@@ -84,5 +87,6 @@ func Get(url string) ([]byte) {
 	if err != nil {
 		panic(err)
 	}
+	wxErr.WxMpErrorFromByte(result, resp)
 	return result
 }

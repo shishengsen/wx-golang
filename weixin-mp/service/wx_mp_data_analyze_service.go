@@ -86,7 +86,6 @@ const (
 func (w *WeChat) WxMpGetUserSummary(start, end time.Time) enpity.WxUserSummary {
 	reqUrl := fmt.Sprintf(get_user_summary, w.WxGetAccessToken())
 	msg := wxDataAnalyzeRequest(reqUrl, start, end)
-	wxerr.WxMpErrorFromByte(msg, nil)
 	var result enpity.WxUserSummary
 	err := json.Unmarshal(msg, &result)
 	if err != nil {
@@ -99,7 +98,6 @@ func (w *WeChat) WxMpGetUserSummary(start, end time.Time) enpity.WxUserSummary {
 func (w *WeChat) WxMpGetUserCumulate(start, end time.Time) enpity.WxUserCumulate {
 	reqUrl := fmt.Sprintf(get_user_cumulate, w.WxGetAccessToken())
 	msg := wxDataAnalyzeRequest(reqUrl, start, end)
-	wxerr.WxMpErrorFromByte(msg, nil)
 	var result enpity.WxUserCumulate
 	err := json.Unmarshal(msg, &result)
 	if err != nil {
@@ -112,7 +110,6 @@ func (w *WeChat) WxMpGetUserCumulate(start, end time.Time) enpity.WxUserCumulate
 func (w *WeChat) WxMpGetArticleSummary(start, end time.Time) enpity.WxArticleSummary {
 	reqUrl := fmt.Sprintf(get_article_summary, w.WxGetAccessToken())
 	msg := wxDataAnalyzeRequest(reqUrl, start, end)
-	wxerr.WxMpErrorFromByte(msg, nil)
 	var result enpity.WxArticleSummary
 	err := json.Unmarshal(msg, &result)
 	if err != nil {
@@ -125,7 +122,6 @@ func (w *WeChat) WxMpGetArticleSummary(start, end time.Time) enpity.WxArticleSum
 func (w *WeChat) WxMpGetArticleTotal(start, end time.Time) enpity.WxArticleTotal {
 	reqUrl := fmt.Sprintf(get_article_total, w.WxGetAccessToken())
 	msg := wxDataAnalyzeRequest(reqUrl, start, end)
-	wxerr.WxMpErrorFromByte(msg, nil)
 	var result enpity.WxArticleTotal
 	err := json.Unmarshal(msg, &result)
 	if err != nil {
@@ -138,7 +134,6 @@ func (w *WeChat) WxMpGetArticleTotal(start, end time.Time) enpity.WxArticleTotal
 func (w *WeChat) WxMpGetUserRead(start, end time.Time) enpity.WxUserRead {
 	reqUrl := fmt.Sprintf(get_user_read, w.WxGetAccessToken())
 	msg := wxDataAnalyzeRequest(reqUrl, start, end)
-	wxerr.WxMpErrorFromByte(msg, nil)
 	var result enpity.WxUserRead
 	err := json.Unmarshal(msg, &result)
 	if err != nil {
@@ -151,7 +146,6 @@ func (w *WeChat) WxMpGetUserRead(start, end time.Time) enpity.WxUserRead {
 func (w *WeChat) WxMpGetUserReadHour(start, end time.Time) enpity.WxUserReadHour {
 	reqUrl := fmt.Sprintf(get_user_read_hour, w.WxGetAccessToken())
 	msg := wxDataAnalyzeRequest(reqUrl, start, end)
-	wxerr.WxMpErrorFromByte(msg, nil)
 	var result enpity.WxUserReadHour
 	err := json.Unmarshal(msg, &result)
 	if err != nil {
@@ -164,7 +158,6 @@ func (w *WeChat) WxMpGetUserReadHour(start, end time.Time) enpity.WxUserReadHour
 func (w *WeChat) WxMpGetUserShare(start, end time.Time) enpity.WxUserShare {
 	reqUrl := fmt.Sprintf(get_user_share, w.WxGetAccessToken())
 	msg := wxDataAnalyzeRequest(reqUrl, start, end)
-	wxerr.WxMpErrorFromByte(msg, nil)
 	var result enpity.WxUserShare
 	err := json.Unmarshal(msg, &result)
 	if err != nil {
@@ -177,7 +170,6 @@ func (w *WeChat) WxMpGetUserShare(start, end time.Time) enpity.WxUserShare {
 func (w *WeChat) WxMpGetUserShareHour(start, end time.Time) enpity.WxUserShareHour {
 	reqUrl := fmt.Sprintf(get_user_share_hour, w.WxGetAccessToken())
 	msg := wxDataAnalyzeRequest(reqUrl, start, end)
-	wxerr.WxMpErrorFromByte(msg, nil)
 	var result enpity.WxUserShareHour
 	err := json.Unmarshal(msg, &result)
 	if err != nil {
@@ -190,7 +182,6 @@ func (w *WeChat) WxMpGetUserShareHour(start, end time.Time) enpity.WxUserShareHo
 func (w *WeChat) WxMpGetUpStreamMsg(start, end time.Time) enpity.WxUpStreamMsg {
 	reqUrl := fmt.Sprintf(get_up_stream_msg, w.WxGetAccessToken())
 	msg := wxDataAnalyzeRequest(reqUrl, start, end)
-	wxerr.WxMpErrorFromByte(msg, nil)
 	var result enpity.WxUpStreamMsg
 	err := json.Unmarshal(msg, &result)
 	if err != nil {
@@ -203,7 +194,6 @@ func (w *WeChat) WxMpGetUpStreamMsg(start, end time.Time) enpity.WxUpStreamMsg {
 func (w *WeChat) WxMpGetUpStreamMsgHour(start, end time.Time) enpity.WxUpStreamMsgHour {
 	reqUrl := fmt.Sprintf(get_up_stream_msg_hour, w.WxGetAccessToken())
 	msg := wxDataAnalyzeRequest(reqUrl, start, end)
-	wxerr.WxMpErrorFromByte(msg, nil)
 	var result enpity.WxUpStreamMsgHour
 	err := json.Unmarshal(msg, &result)
 	if err != nil {
@@ -216,7 +206,6 @@ func (w *WeChat) WxMpGetUpStreamMsgHour(start, end time.Time) enpity.WxUpStreamM
 func (w *WeChat) WxMpGetUpStreamMsgWeek(start, end time.Time) enpity.WxUpStreamMsgWeek {
 	reqUrl := fmt.Sprintf(get_up_stream_msg_week, w.WxGetAccessToken())
 	msg := wxDataAnalyzeRequest(reqUrl, start, end)
-	wxerr.WxMpErrorFromByte(msg, nil)
 	var result enpity.WxUpStreamMsgWeek
 	err := json.Unmarshal(msg, &result)
 	if err != nil {
@@ -268,7 +257,6 @@ func (w *WeChat) WxMpGetUpStreamMsgDistWeek(start, end time.Time) enpity.WxUpStr
 func (w *WeChat) WxMpGetUpStreamMsgDistMonth(start, end time.Time) enpity.WxUpStreamMsgDistMonth {
 	reqUrl := fmt.Sprintf(get_up_stream_msg_dist_month, w.WxGetAccessToken())
 	msg := wxDataAnalyzeRequest(reqUrl, start, end)
-	wxerr.WxMpErrorFromByte(msg, nil)
 	var result enpity.WxUpStreamMsgDistMonth
 	err := json.Unmarshal(msg, &result)
 	if err != nil {
@@ -281,7 +269,6 @@ func (w *WeChat) WxMpGetUpStreamMsgDistMonth(start, end time.Time) enpity.WxUpSt
 func (w *WeChat) WxGetInterfaceSummary(start, end time.Time) enpity.WxInterfaceSummary {
 	reqUrl := fmt.Sprintf(get_interface_summary, w.WxGetAccessToken())
 	msg := wxDataAnalyzeRequest(reqUrl, start, end)
-	wxerr.WxMpErrorFromByte(msg, nil)
 	var result enpity.WxInterfaceSummary
 	err := json.Unmarshal(msg, &result)
 	if err != nil {
@@ -294,7 +281,6 @@ func (w *WeChat) WxGetInterfaceSummary(start, end time.Time) enpity.WxInterfaceS
 func (w *WeChat) WxGetInterfaceSummaryHour(start, end time.Time) enpity.WxInterfaceSummaryHour {
 	reqUrl := fmt.Sprintf(get_interface_summary_hour, w.WxGetAccessToken())
 	msg := wxDataAnalyzeRequest(reqUrl, start, end)
-	wxerr.WxMpErrorFromByte(msg, nil)
 	var result enpity.WxInterfaceSummaryHour
 	err := json.Unmarshal(msg, &result)
 	if err != nil {
