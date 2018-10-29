@@ -20,8 +20,9 @@ const (
 	TYPE_MEDIA_ID           = "media_id"
 	TYPE_VIEW_LIMITED       = "view_limited"
 
-	// 临时素材类别
+	// 素材类别
 
+	MATERIAL_NEWS				=	"news"
 	TEMP_MATERIAL_IMAGE			=	"image"
 	TEMP_MATERIAL_VOICE			=	"voice"
 	TEMP_MATERIAL_VIDEO			=	"video"
@@ -40,4 +41,15 @@ const (
 	OAUTH_REFRESH_TOKEN_URL = "https://api.weixin.qq.com/sns/oauth2/refresh_token?appid=%s&grant_type=refresh_token&refresh_token=%s"
 	PULL_USER_INFO_URL      = "https://api.weixin.qq.com/sns/userinfo?access_token=%s&openid=%s&lang=zh_CN"
 	VERIFY_OAUTH_TOKEN      = "https://api.weixin.qq.com/sns/auth?access_token=%s&openid=%s"
+
+	// 微信推送事件类型
+
+	MSG_EVENT_TYPR_TEXT				=		"text"
+	MSG_EVENT_TYPE_IMAGE			=		"image"
+	MSG_EVENT_TYPE_VOICE			=		"voice"
+	MSG_EVENT_TYPE_VIDEO			=		"video"
+	MSG_EVENT_TYPE_SHORT_VIDEO		=		"shortvideo"
+	MSG_EVENT_TYPE_LOCATION			=		"location"
+	MSG_EVENT_TYPE_LINK				=		"link"
+	MSG_EVENT_TYPE_EVENT			=		"event"
 )

@@ -2,8 +2,8 @@ package error
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
+	"wx-golang/weixin-common/log"
 )
 
 type WxMpError struct {
@@ -21,20 +21,13 @@ func (e *WxMpError)ToJson(w WxMpError) string {
 
 // 对微信返回信息进行错误信息扫描，如果发现非正常状态返回，则抛出异常信息
 func WxMpErrorFromByte(result []byte, resp *http.Response) {
-	var tmp map[string]interface{}
+	var tmp WxMpError
 	err := json.Unmarshal(result, &tmp)
 	if err != nil {
-		panic(err)
+		log.CheckError(err)
 	}
-	if val, ok := tmp["errcode"]; ok == true {
-		if val != 0 || val != "0" {
-			var wxErr WxMpError
-			err = json.Unmarshal(result, &wxErr)
-			if err != nil {
-				panic(err)
-			}
-			panic(fmt.Errorf("微信调用api报错：[%s]", wxErr.ToJson(wxErr)))
-		}
+	if tmp.Errcode != 0 {
+		panic(tmp)
 	}
 }
 
