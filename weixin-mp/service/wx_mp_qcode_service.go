@@ -6,7 +6,6 @@ import (
 	"os"
 	"wx-golang/weixin-common/http"
 	"wx-golang/weixin-common/utils"
-	wxerr "wx-golang/weixin-common/error"
 	"wx-golang/weixin-mp/enpity"
 )
 

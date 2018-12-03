@@ -1,13 +1,13 @@
 package service
 
 import (
-	"ProjectOne/routers"
+	"wx-golang/weixin-common/utils"
 	"wx-golang/weixin-mp/enpity"
 )
 
-// 继承该接口即可实现微信信息路由分发
+// 继承该接口实现微信消息的处理
 type MsgHandler interface {
-	Handler(WxMessage)
+	Handler(enpity.WxMessage)
 }
 
 // 路由消息匹配规则
@@ -24,7 +24,7 @@ type MsgRule struct {
 
 // 微信消息路由结构体
 type MsgRouter struct {
-	rules			[]MsgRule
+	rules			[]*MsgRule
 }
 
 // 初始化消息路由
@@ -40,7 +40,26 @@ func (r *MsgRouter) Begin(route *MsgRouter) *MsgRule {
 // 结束路由规则匹配
 func (r *MsgRule) End() *MsgRouter {
 	r.router.rules = append(r.router.rules, r)
+	return r.router
 }
+
+// 微信消息路由分发消息处理
+// 目前设置每个路由消息处理仅处理一次
+// 根据Async决定是否使用异步操作
+func (w *WeChat) route(wxMsg enpity.WxMessage) {
+	routers := w.router
+	for _, rule := range routers.rules {
+		if rule.match(wxMsg) {
+			if rule.async {
+				utils.SubmitMpMsgWork(wxMsg, rule.handler.Handler)
+			} else {
+				rule.handler.Handler(wxMsg)
+			}
+		}
+	}
+}
+
+// ###################### 消息匹配规则 ######################
 
 func (r *MsgRule) FromUser(fromUser string) *MsgRule {
 	r.fromUser = fromUser
@@ -72,8 +91,12 @@ func (r *MsgRule) Async(async bool) *MsgRule {
 	return r
 }
 
+// 消息规则匹配
 func (r *MsgRule) match(wxMsg enpity.WxMessage) bool {
-	return r.fromUser == wxMsg.FromUserName && r.msgType == wxMsg.MsgType && r.event == wxMsg.Event && r.eventKey == wxMsg.EventKey
+	return r.fromUser == wxMsg.FromUserName &&
+		r.msgType == wxMsg.MsgType &&
+		r.event == wxMsg.Event &&
+		r.eventKey == wxMsg.EventKey
 }
 
 

@@ -1,7 +1,6 @@
 package service
 
 import (
-	"ProjectOne/routers"
 	"encoding/json"
 	"encoding/xml"
 	"fmt"
@@ -11,7 +10,6 @@ import (
 	"wx-golang/weixin-common/http"
 	"wx-golang/weixin-common/utils"
 	"wx-golang/weixin-mp/enpity"
-	wxerr "wx-golang/weixin-common/error"
 )
 
 const (
@@ -39,7 +37,7 @@ const (
 
 type WeChat struct {
 	cfg     		*enpity.MpConfig
-	routers				*MsgRouter
+	router				*MsgRouter
 }
 
 // 确保只初始化一次 MpConfig

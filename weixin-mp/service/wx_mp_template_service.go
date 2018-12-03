@@ -25,40 +25,40 @@ func (w *WeChat) WxTemplateSetIndustry(industry enpity.WxIndustry) string {
 }
 
 // 获取设置的行业信息
-func (w *WeChat) WxTemplateGetIndustry() enpity.WxIndustryInfo {
+func (w *WeChat) WxTemplateGetIndustry() (enpity.WxIndustryInfo, error) {
 	reqUrl := fmt.Sprintf(get_industry_url, w.WxGetAccessToken())
 	msg := http.Get(reqUrl)
 	var industryInfo enpity.WxIndustryInfo
-	json.Unmarshal(msg, &industryInfo)
-	return industryInfo
+	err := json.Unmarshal(msg, &industryInfo)
+	return industryInfo, err
 }
 
 // 获得模板ID
-func (w *WeChat) WxTemplateGetId(shortId string) string {
+func (w *WeChat) WxTemplateGetId(shortId string) (string, error) {
 	reqUrl := fmt.Sprintf(add_template_url, w.WxGetAccessToken())
 	body := map[string]string{
 		"template_id_short": shortId,
 	}
 	msg := http.Post(reqUrl, string(utils.Interface2byte(body)))
 	var responseBody map[string]string
-	json.Unmarshal(msg, &responseBody)
-	return responseBody["template_id"]
+	err := json.Unmarshal(msg, &responseBody)
+	return responseBody["template_id"], err
 }
 
 // 获取模板列表
-func (w *WeChat) WxTemplateGetTemplateList() enpity.WxTemplateList {
+func (w *WeChat) WxTemplateGetTemplateList() (enpity.WxTemplateList, error) {
 	reqUrl := fmt.Sprintf(get_all_private_template, w.WxGetAccessToken())
 	msg := http.Get(reqUrl)
 	var respBody enpity.WxTemplateList
-	json.Unmarshal(msg, &respBody)
-	return respBody
+	err := json.Unmarshal(msg, &respBody)
+	return respBody, err
 }
 
 // 发送模板消息
-func (w *WeChat) WxTemplateSendMsg(templateMsg enpity.WxTemplateMsg) map[string]interface{} {
+func (w *WeChat) WxTemplateSendMsg(templateMsg enpity.WxTemplateMsg) (map[string]interface{}, error) {
 	reqUrl := fmt.Sprintf(send_template_msg, w.WxGetAccessToken())
 	msg := http.Post(reqUrl, string(utils.Interface2byte(templateMsg)))
 	var respBody map[string]interface{}
-	json.Unmarshal(msg, &respBody)
-	return respBody
+	err := json.Unmarshal(msg, &respBody)
+	return respBody, err
 }
