@@ -1,6 +1,7 @@
 package service
 
 import (
+	"ProjectOne/routers"
 	"encoding/json"
 	"encoding/xml"
 	"fmt"
@@ -38,7 +39,7 @@ const (
 
 type WeChat struct {
 	cfg     		*enpity.MpConfig
-	handlerMap 		map[string]*enpity.MsgRouter
+	routers				*MsgRouter
 }
 
 // 确保只初始化一次 MpConfig
@@ -125,7 +126,7 @@ func (w *WeChat) WxGetWxJsApiTicket(forceRefresh bool) enpity.WxJsTicket {
 	if forceRefresh {
 		getWxJsapiTicket(w.cfg)
 	}
-	if w.cfg.JsApiTicket.IsExpires() {
+	if !forceRefresh && w.cfg.JsApiTicket.IsExpires() {
 		getWxJsapiTicket(w.cfg)
 	}
 	w.cfg.JsapiTicketLock.L.Unlock()

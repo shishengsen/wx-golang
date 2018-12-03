@@ -44,9 +44,3 @@ type WxMessage struct {
 	Precision string  `xml:"Precision,omitempty"` // 地理位置精度
 
 }
-
-// 继承该接口即可实现微信信息路由分发
-type MsgRouter interface {
-	MsgType() string
-	Handler(WxMessage)
-}
