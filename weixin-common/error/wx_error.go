@@ -7,13 +7,13 @@ import (
 )
 
 type WxMpError struct {
-	ErrCode				int32				`json:"errcode"`
-	ErrMsg				string				`json:"errmsg"`
+	ErrCode int32  `json:"errcode"`
+	ErrMsg  string `json:"errmsg"`
 }
 
 type WxPayError struct {
-	ErrCode				int32				`json:"errcode"`
-	ErrMsg				string				`json:"errmsg"`
+	ErrCode int32  `json:"errcode"`
+	ErrMsg  string `json:"errmsg"`
 }
 
 func (e *WxMpError) Err() error {
@@ -24,7 +24,7 @@ func (e *WxMpError) Err() error {
 	return errors.New(errors.ErrorCode(uint32(e.ErrCode)), s)
 }
 
-func (e *WxMpError)ToJson() (string, error) {
+func (e *WxMpError) ToJson() (string, error) {
 	bytes, err := json.Marshal(e)
 	if err != nil {
 		return "", err
@@ -33,7 +33,7 @@ func (e *WxMpError)ToJson() (string, error) {
 }
 
 // 对微信返回信息进行错误信息扫描，如果发现非正常状态返回，则抛出异常信息
-func WxMpErrorFromByte(result []byte, resp *http.Response) (error) {
+func WxMpErrorFromByte(result []byte, resp *http.Response) error {
 	var tmp WxMpError
 	err := json.Unmarshal(result, &tmp)
 	if err != nil {
@@ -48,4 +48,3 @@ func WxMpErrorFromByte(result []byte, resp *http.Response) (error) {
 func WxPayErrorFromByte(result []byte, resq *http.Response) []byte {
 	return nil
 }
-

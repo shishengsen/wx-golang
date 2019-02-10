@@ -22,17 +22,17 @@ const (
 
 	// 素材类别
 
-	MATERIAL_NEWS				=	"news"
-	TEMP_MATERIAL_IMAGE			=	"image"
-	TEMP_MATERIAL_VOICE			=	"voice"
-	TEMP_MATERIAL_VIDEO			=	"video"
-	TEMP_MATERIAL_THUMB			=	"thumb"
+	MATERIAL_NEWS       = "news"
+	TEMP_MATERIAL_IMAGE = "image"
+	TEMP_MATERIAL_VOICE = "voice"
+	TEMP_MATERIAL_VIDEO = "video"
+	TEMP_MATERIAL_THUMB = "thumb"
 
 	// 语言类别
 
-	LANG_ZH_CN				= "zh_CN"
-	LANG_ZH_TW				= "zh_TW"
-	LANG_EN					= "en"
+	LANG_ZH_CN = "zh_CN"
+	LANG_ZH_TW = "zh_TW"
+	LANG_EN    = "en"
 
 	// 微信网页授权链接
 
@@ -44,12 +44,15 @@ const (
 
 	// 微信推送事件类型
 
-	MSG_EVENT_TYPR_TEXT				=		"text"
-	MSG_EVENT_TYPE_IMAGE			=		"image"
-	MSG_EVENT_TYPE_VOICE			=		"voice"
-	MSG_EVENT_TYPE_VIDEO			=		"video"
-	MSG_EVENT_TYPE_SHORT_VIDEO		=		"shortvideo"
-	MSG_EVENT_TYPE_LOCATION			=		"location"
-	MSG_EVENT_TYPE_LINK				=		"link"
-	MSG_EVENT_TYPE_EVENT			=		"event"
+	MSG_EVENT_TYPR_TEXT        = "text"
+	MSG_EVENT_TYPE_IMAGE       = "image"
+	MSG_EVENT_TYPE_VOICE       = "voice"
+	MSG_EVENT_TYPE_VIDEO       = "video"
+	MSG_EVENT_TYPE_SHORT_VIDEO = "shortvideo"
+	MSG_EVENT_TYPE_LOCATION    = "location"
+	MSG_EVENT_TYPE_LINK        = "link"
+	MSG_EVENT_TYPE_EVENT       = "event"
+	MSG_EVENT_TYPE_QUALIFICATION_VERIFY	= "qualification_verify"
+	MSG_EVENT_TYPE_NAMING_VERIFY	= "naming_verify"
+	MSG_EVENT_TYPE_ANNUAL_RENEW	= "annual_renew"
 )

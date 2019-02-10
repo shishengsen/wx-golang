@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"wx-golang/weixin-common/http"
-	"wx-golang/weixin-mp/enpity"
 	"wx-golang/weixin-common/utils"
+	"wx-golang/weixin-mp/enpity"
 )
 
 const (
@@ -18,18 +18,18 @@ const (
 )
 
 // 设置所属行业
-func (w *WeChat) WxTemplateSetIndustry(industry enpity.WxIndustry) string {
+func (w *WeChat) WxTemplateSetIndustry(industry enpity.WxIndustry) (string, error) {
 	reqUrl := fmt.Sprintf(set_industry_url, w.WxGetAccessToken())
-	msg := http.Post(reqUrl, industry.ToJson(industry))
-	return string(msg)
+	msg, err := http.Post(reqUrl, industry.ToJson(industry))
+	return string(msg), err
 }
 
 // 获取设置的行业信息
 func (w *WeChat) WxTemplateGetIndustry() (enpity.WxIndustryInfo, error) {
 	reqUrl := fmt.Sprintf(get_industry_url, w.WxGetAccessToken())
-	msg := http.Get(reqUrl)
+	msg, err := http.Get(reqUrl)
 	var industryInfo enpity.WxIndustryInfo
-	err := json.Unmarshal(msg, &industryInfo)
+	err = json.Unmarshal(msg, &industryInfo)
 	return industryInfo, err
 }
 
@@ -39,26 +39,26 @@ func (w *WeChat) WxTemplateGetId(shortId string) (string, error) {
 	body := map[string]string{
 		"template_id_short": shortId,
 	}
-	msg := http.Post(reqUrl, string(utils.Interface2byte(body)))
+	msg, err := http.Post(reqUrl, string(utils.Interface2byte(body)))
 	var responseBody map[string]string
-	err := json.Unmarshal(msg, &responseBody)
+	err = json.Unmarshal(msg, &responseBody)
 	return responseBody["template_id"], err
 }
 
 // 获取模板列表
 func (w *WeChat) WxTemplateGetTemplateList() (enpity.WxTemplateList, error) {
 	reqUrl := fmt.Sprintf(get_all_private_template, w.WxGetAccessToken())
-	msg := http.Get(reqUrl)
+	msg, err := http.Get(reqUrl)
 	var respBody enpity.WxTemplateList
-	err := json.Unmarshal(msg, &respBody)
+	err = json.Unmarshal(msg, &respBody)
 	return respBody, err
 }
 
 // 发送模板消息
 func (w *WeChat) WxTemplateSendMsg(templateMsg enpity.WxTemplateMsg) (map[string]interface{}, error) {
 	reqUrl := fmt.Sprintf(send_template_msg, w.WxGetAccessToken())
-	msg := http.Post(reqUrl, string(utils.Interface2byte(templateMsg)))
+	msg, err := http.Post(reqUrl, string(utils.Interface2byte(templateMsg)))
 	var respBody map[string]interface{}
-	err := json.Unmarshal(msg, &respBody)
+	err = json.Unmarshal(msg, &respBody)
 	return respBody, err
 }

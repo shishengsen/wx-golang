@@ -28,11 +28,15 @@ func (w *WeChat) WxGetOAuthTokenByCode(code string) enpity.WxOAuthAccessToken {
 // 对外暴露的微信网页授权的accessToken
 func (w *WeChat) WxGetOAuthToken() string {
 	if w.cfg.OAuthToken != nil {
-		if !isOAuthExpires(*w){
+		if !isOAuthExpires(*w) {
 			return w.cfg.OAuthToken.OauthAccessToken
 		}
 	}
-	return refreshOAuthToken(*w).OauthAccessToken
+	c, err := refreshOAuthToken(*w)
+	if err != nil {
+
+	}
+	return c.OauthAccessToken
 }
 
 // 对外暴露用户授权链接生成接口
@@ -40,14 +44,13 @@ func (w *WeChat) WxOauth2buildAuthorizationUrl(redirectURI string, scope string,
 	return fmt.Sprintf(authorize_url, w.cfg.AppId, utils.UrlEncode(redirectURI), scope, state)
 }
 
-
 // 检验授权凭证（access_token）是否有效
 func (w *WeChat) WxVerifyToken(openid string) bool {
 	reqUrl := fmt.Sprintf(verify_oauth_token, w.WxGetOAuthToken(), openid)
-	result := http.Get(reqUrl)
+	result, err := http.Get(reqUrl)
 	var returnCode wxerr.WxMpError
 	json.Unmarshal(result, &returnCode)
-	return returnCode.Errcode == 0
+	return err == nil
 }
 
 // 获取openid所对应的用户信息
@@ -56,7 +59,10 @@ func (w *WeChat) WxPullUserInfo(openid, lang string) enpity.WxMpUser {
 		lang = wxconsts.LANG_ZH_CN
 	}
 	reqUrl := fmt.Sprintf(pull_user_info_url, w.WxGetOAuthToken(), openid, lang)
-	resp := http.Get(reqUrl)
+	resp, err := http.Get(reqUrl)
+	if err != nil {
+
+	}
 	var opUser enpity.WxMpUser
 	json.Unmarshal(resp, &opUser)
 	return opUser
@@ -65,7 +71,10 @@ func (w *WeChat) WxPullUserInfo(openid, lang string) enpity.WxMpUser {
 // 根据 code 获取access_token
 func getOAuthAccessToken(code string, w WeChat) enpity.WxOAuthAccessToken {
 	reqUrl := fmt.Sprintf(oauth_access_token_url, w.cfg.AppId, w.cfg.Secret, code)
-	msg := http.Get(reqUrl)
+	msg, err := http.Get(reqUrl)
+	if err != nil {
+
+	}
 	var oauth enpity.WxOAuthAccessToken
 	json.Unmarshal(msg, &oauth)
 	oauth.ExpiresIn += +time.Now().Unix()
@@ -85,16 +94,16 @@ func isOAuthExpires(wx WeChat) bool {
 }
 
 // 刷新token信息
-func refreshOAuthToken(wx WeChat) enpity.WxOAuthAccessToken {
+func refreshOAuthToken(wx WeChat) (enpity.WxOAuthAccessToken, error) {
 	if wx.cfg.OAuthToken.IsExpires {
 		reqUrl := fmt.Sprintf(oauth_refresh_token_url, wx.cfg.AppId, wx.cfg.OAuthToken.OauthRefreshToken)
-		msg := http.Get(reqUrl)
+		msg, err := http.Get(reqUrl)
 		var oauth enpity.WxOAuthAccessToken
 		json.Unmarshal(msg, &oauth)
 		oauth.ExpiresIn += +time.Now().Unix()
 		oauth.IsExpires = false
 		wx.wxOAuthTokenStoreInMem(&oauth)
-		return oauth
+		return oauth, err
 	}
-	return *wx.cfg.OAuthToken
+	return *wx.cfg.OAuthToken, nil
 }

@@ -43,4 +43,10 @@ type WxMessage struct {
 	Longitude float64 `xml:"Longitude,omitempty"` // 地理位置经度
 	Precision string  `xml:"Precision,omitempty"` // 地理位置精度
 
+	//	微信认证
+	FailTime	int64	`xml:"FailTime,omitempty"`
+	FailReason	string	`xml:"FailReason,omitempty"`
+	ExpiredTime	int64	`xml:"ExpiredTime,omitempty"`
+
+
 }

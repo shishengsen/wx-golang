@@ -10,21 +10,21 @@ type MsgHandler interface {
 	Handler(enpity.WxMessage)
 }
 
-// 路由消息匹配规则
-type MsgRule struct {
-	router				*MsgRouter
-	fromUser			string
-	msgType				string
-	event				string
-	eventKey			string
-	content				string
-	async				bool
-	handler				MsgHandler
-}
-
 // 微信消息路由结构体
 type MsgRouter struct {
-	rules			[]*MsgRule
+	rules []*MsgRule
+}
+
+// 路由消息匹配规则
+type MsgRule struct {
+	router   *MsgRouter
+	fromUser string
+	msgType  string
+	event    string
+	eventKey string
+	content  string
+	async    bool
+	handler  MsgHandler
 }
 
 // 初始化消息路由
@@ -33,8 +33,8 @@ func (w *WeChat) RouterInit() *MsgRouter {
 }
 
 // 开始路由规则匹配
-func (r *MsgRouter) Begin(route *MsgRouter) *MsgRule {
-	return &MsgRule{router: route}
+func (r *MsgRouter) Begin() *MsgRule {
+	return &MsgRule{router: r}
 }
 
 // 结束路由规则匹配
@@ -98,5 +98,3 @@ func (r *MsgRule) match(wxMsg enpity.WxMessage) bool {
 		r.event == wxMsg.Event &&
 		r.eventKey == wxMsg.EventKey
 }
-
-

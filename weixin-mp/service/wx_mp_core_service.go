@@ -16,28 +16,28 @@ const (
 	/**
 
 	 */
-	access_token_url 		=		"https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=%s&secret=%s"
+	access_token_url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=%s&secret=%s"
 	/**
 
 	 */
-	clear_quota      		= 		"https://api.weixin.qq.com/cgi-bin/clear_quota?access_token=%s"
+	clear_quota = "https://api.weixin.qq.com/cgi-bin/clear_quota?access_token=%s"
 	/**
 
 	 */
-	jsapi_ticket     		=		"https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=%s&type=jsapi"
+	jsapi_ticket = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=%s&type=jsapi"
 	/**
 
 	 */
-	jsapi_signature  		= 		"jsapi_ticket=%s&noncestr=%s&timestamp=%s&url=%s"
+	jsapi_signature = "jsapi_ticket=%s&noncestr=%s&timestamp=%s&url=%s"
 	/**
 	长链接转短链接接口
-	 */
-	longurl_to_shorturl		=		"https://api.weixin.qq.com/cgi-bin/shorturl?access_token=%s"
+	*/
+	longurl_to_shorturl = "https://api.weixin.qq.com/cgi-bin/shorturl?access_token=%s"
 )
 
 type WeChat struct {
-	cfg     		*enpity.MpConfig
-	router				*MsgRouter
+	cfg    *enpity.MpConfig
+	router *MsgRouter
 }
 
 // 确保只初始化一次 MpConfig
@@ -84,7 +84,10 @@ func (w *WeChat) WxCheckSignature(cfg enpity.MpConfig, signature string, timesta
 func (w *WeChat) WxUpdateAccessToken() {
 	w.cfg.AccessTokenLock.L.Lock()
 	if isExpires(*w) {
-		tokenMap := refreshToken(w.cfg, *w)
+		tokenMap, err := refreshToken(w.cfg, *w)
+		if err != nil {
+
+		}
 		w.cfg.AccessTokenExpiresTime = tokenMap["expires_in"].(int64) + time.Now().Unix()
 		w.cfg.AccessToken = tokenMap["access_token"].(string)
 	}
@@ -100,21 +103,21 @@ func (w *WeChat) WxGetAccessToken() string {
 }
 
 // 公众号调用或第三方平台帮公众号调用对公众号的所有api调用（包括第三方帮其调用）次数进行清零：
-func (w *WeChat) WxApiClearQuota() map[string]interface{} {
+func (w *WeChat) WxApiClearQuota() (map[string]interface{}, error) {
 	reqUrl := fmt.Sprintf(clear_quota, w.WxGetAccessToken())
 	reqBody := map[string]string{
 		"appid": w.cfg.AppId,
 	}
-	msg := http.Post(reqUrl, string(utils.Interface2byte(reqBody)))
+	msg, err := http.Post(reqUrl, string(utils.Interface2byte(reqBody)))
 	var respBody map[string]interface{}
 	json.Unmarshal(msg, &reqBody)
-	return respBody
+	return respBody, err
 }
 
 // 解析微信返回的xml数据
 func (w *WeChat) WxMpSubscribeMsgService(buf []byte) enpity.WxMessage {
 	var msg enpity.WxMessage
-	xml.Unmarshal(buf, &msg)
+	_ = xml.Unmarshal(buf, &msg)
 	return msg
 }
 
@@ -152,12 +155,12 @@ func (w *WeChat) WxCreateJsapiSignature(url string) enpity.WxJsConfig {
 func (w *WeChat) WxMakeShortLink(longUrl string) string {
 	reqUrl := fmt.Sprintf(longurl_to_shorturl, w.WxGetAccessToken())
 	body := map[string]string{
-		"action": "long2short",
+		"action":   "long2short",
 		"long_url": longUrl,
 	}
-	msg := http.Post(reqUrl, string(utils.Interface2byte(body)))
+	msg, err := http.Post(reqUrl, string(utils.Interface2byte(body)))
 	var result map[string]string
-	err := json.Unmarshal(msg, &result)
+	err = json.Unmarshal(msg, &result)
 	if err != nil {
 		panic(err)
 	}
@@ -167,9 +170,9 @@ func (w *WeChat) WxMakeShortLink(longUrl string) string {
 // 内部正式获取微信js的ticket信息
 func getWxJsapiTicket(cfg *enpity.MpConfig) {
 	reqUrl := fmt.Sprintf(jsapi_ticket, cfg.AccessToken)
-	resp := http.Get(reqUrl)
+	resp, err := http.Get(reqUrl)
 	var jsTicket enpity.WxJsTicket
-	err := json.Unmarshal(resp, &jsTicket)
+	err = json.Unmarshal(resp, &jsTicket)
 	if err != nil {
 		panic(err)
 	}
@@ -182,11 +185,11 @@ func isExpires(w WeChat) bool {
 }
 
 // 内部调用刷新accessToken的微信api接口，此处是真正实现accessToken刷新的方法
-func refreshToken(cfg *enpity.MpConfig, w WeChat) map[string]interface{} {
+func refreshToken(cfg *enpity.MpConfig, w WeChat) (map[string]interface{}, error) {
 	requestUrl := fmt.Sprintf(access_token_url, cfg.AppId, cfg.Secret)
-	msg := http.Get(requestUrl)
+	msg, err := http.Get(requestUrl)
 	var f interface{}
 	json.Unmarshal(msg, &f)
 	m := f.(map[string]interface{})
-	return m
+	return m, err
 }
