@@ -90,9 +90,13 @@ const (
 	delete_reply_comment = "https://api.weixin.qq.com/cgi-bin/comment/reply/delete?access_token=%s"
 )
 
+type WxMaterial struct {
+	token	*Token
+} 
+
 // 增加临时素材
-func (w *WeChat) WxAddTempMaterial(materialType string, file os.File) (enpity.TempMaterial, error) {
-	reqUrl := fmt.Sprintf(add_temp_material, w.WxGetAccessToken(), materialType)
+func (m *WxMaterial) WxAddTempMaterial(materialType string, file os.File) (enpity.TempMaterial, error) {
+	reqUrl := fmt.Sprintf(add_temp_material, m.token.WxGetAccessToken(), materialType)
 	msg, err := http.PostWithFile(reqUrl, &file)
 	var material enpity.TempMaterial
 	json.Unmarshal(msg, &material)
@@ -100,8 +104,8 @@ func (w *WeChat) WxAddTempMaterial(materialType string, file os.File) (enpity.Te
 }
 
 //获取非视频微信临时素材
-func (w *WeChat) WxGetTempNoVideoMaterial(materialId string) *os.File {
-	reqUrl := fmt.Sprintf(get_temp_material, w.WxGetAccessToken(), materialId)
+func (m *WxMaterial) WxGetTempNoVideoMaterial(materialId string) *os.File {
+	reqUrl := fmt.Sprintf(get_temp_material, m.token.WxGetAccessToken(), materialId)
 	fileByte, err := http.Get(reqUrl)
 	_uuid, err := uuid.NewV4()
 	if err != nil {
@@ -119,8 +123,8 @@ func (w *WeChat) WxGetTempNoVideoMaterial(materialId string) *os.File {
 }
 
 // 获取微信视频临时素材
-func (w *WeChat) WxGetTempVideoMaterial(materialId string) string {
-	reqUrl := fmt.Sprintf(get_temp_material, w.WxGetAccessToken(), materialId)
+func (m *WxMaterial) WxGetTempVideoMaterial(materialId string) string {
+	reqUrl := fmt.Sprintf(get_temp_material, m.token.WxGetAccessToken(), materialId)
 	result, err := http.Get(reqUrl)
 	var tmp map[string]string
 	err = json.Unmarshal(result, &tmp)
@@ -134,8 +138,8 @@ func (w *WeChat) WxGetTempVideoMaterial(materialId string) string {
 }
 
 // 高清语音素材获取接口
-func (w *WeChat) WxGetHighSpeexMaterial(materialId string) *os.File {
-	reqUrl := fmt.Sprintf(get_material_from_js, w.WxGetAccessToken(), materialId)
+func (m *WxMaterial) WxGetHighSpeexMaterial(materialId string) *os.File {
+	reqUrl := fmt.Sprintf(get_material_from_js, m.token.WxGetAccessToken(), materialId)
 	voiceByte, err := http.Get(reqUrl)
 	voiceFile, err := os.Create(materialId)
 	if err != nil {
@@ -149,8 +153,8 @@ func (w *WeChat) WxGetHighSpeexMaterial(materialId string) *os.File {
 }
 
 // 上传永久素材——新增永久图文素材
-func (w *WeChat) WxAddNewsMaterial(newsMaterial enpity.NewsMaterial) (enpity.TempMaterial, error) {
-	reqUrl := fmt.Sprintf(add_news_material, w.WxGetAccessToken())
+func (m *WxMaterial) WxAddNewsMaterial(newsMaterial enpity.NewsMaterial) (enpity.TempMaterial, error) {
+	reqUrl := fmt.Sprintf(add_news_material, m.token.WxGetAccessToken())
 	reqBody := newsMaterial.ToJson(newsMaterial)
 	msg, err := http.Post(reqUrl, reqBody)
 	var material enpity.TempMaterial
@@ -159,16 +163,16 @@ func (w *WeChat) WxAddNewsMaterial(newsMaterial enpity.NewsMaterial) (enpity.Tem
 }
 
 // 对永久图文素材进行修改
-func (w *WeChat) UpdateNewsMaterial(newsMaterial enpity.NewsMaterial) bool {
-	reqUrl := fmt.Sprintf(update_news_material, w.WxGetAccessToken())
+func (m *WxMaterial) UpdateNewsMaterial(newsMaterial enpity.NewsMaterial) bool {
+	reqUrl := fmt.Sprintf(update_news_material, m.token.WxGetAccessToken())
 	reqBody := newsMaterial.ToJson(newsMaterial)
 	http.Post(reqUrl, reqBody)
 	return true
 }
 
 // 上传图文消息内的图片获取URL
-func (w *WeChat) WxUploadNewsMaterialPic(file os.File) (string, error) {
-	reqUrl := fmt.Sprintf(upload_news_pic, w.WxGetAccessToken())
+func (m *WxMaterial) WxUploadNewsMaterialPic(file os.File) (string, error) {
+	reqUrl := fmt.Sprintf(upload_news_pic, m.token.WxGetAccessToken())
 	msg, err := http.PostWithFile(reqUrl, &file)
 	var tmp map[string]string
 	json.Unmarshal(msg, &tmp)
@@ -176,8 +180,8 @@ func (w *WeChat) WxUploadNewsMaterialPic(file os.File) (string, error) {
 }
 
 // 新增其他类型永久素材
-func (w *WeChat) WxAddNoVideoPermanentMaterial(materialType string, file os.File) (enpity.PermanentMaterial, error) {
-	reqUrl := fmt.Sprintf(add_other_material, w.WxGetAccessToken(), materialType)
+func (m *WxMaterial) WxAddNoVideoPermanentMaterial(materialType string, file os.File) (enpity.PermanentMaterial, error) {
+	reqUrl := fmt.Sprintf(add_other_material, m.token.WxGetAccessToken(), materialType)
 	msg, err := http.PostWithFile(reqUrl, &file)
 	var result enpity.PermanentMaterial
 	json.Unmarshal(msg, &result)
@@ -185,8 +189,8 @@ func (w *WeChat) WxAddNoVideoPermanentMaterial(materialType string, file os.File
 }
 
 // 新增视频类素材
-func (w *WeChat) WxAddVideoMaterial(file os.File, desc enpity.VideoMaterialDesc) (enpity.PermanentMaterial, error) {
-	reqUrl := fmt.Sprintf(add_other_material, w.WxGetAccessToken(), wxconsts.TEMP_MATERIAL_VIDEO)
+func (m *WxMaterial) WxAddVideoMaterial(file os.File, desc enpity.VideoMaterialDesc) (enpity.PermanentMaterial, error) {
+	reqUrl := fmt.Sprintf(add_other_material, m.token.WxGetAccessToken(), wxconsts.TEMP_MATERIAL_VIDEO)
 	body := desc.ToJson(desc)
 	msg, err := http.PostWithFileAndBody(reqUrl, body, &file)
 	var result enpity.PermanentMaterial
@@ -195,32 +199,32 @@ func (w *WeChat) WxAddVideoMaterial(file os.File, desc enpity.VideoMaterialDesc)
 }
 
 // 获取图文永久素材
-func (w *WeChat) WxGetPermanentNewsMaterial(materialId string) (enpity.NewsMaterial, error) {
-	result, err := getPermanentMaterial(materialId, w.WxGetAccessToken())
+func (m *WxMaterial) WxGetPermanentNewsMaterial(materialId string) (enpity.NewsMaterial, error) {
+	result, err := getPermanentMaterial(materialId, m.token.WxGetAccessToken())
 	var newsMaterial enpity.NewsMaterial
 	json.Unmarshal(result, &newsMaterial)
 	return newsMaterial, err
 }
 
 // 获取视频永久素材
-func (w *WeChat) WxGetPermanentVideoMaterial(materialId string) (enpity.VideoPermanentMaterial, error) {
-	result, err := getPermanentMaterial(materialId, w.WxGetAccessToken())
+func (m *WxMaterial) WxGetPermanentVideoMaterial(materialId string) (enpity.VideoPermanentMaterial, error) {
+	result, err := getPermanentMaterial(materialId, m.token.WxGetAccessToken())
 	var videoMaterial enpity.VideoPermanentMaterial
 	json.Unmarshal(result, &videoMaterial)
 	return videoMaterial, err
 }
 
 // 获取其他永久素材
-func (w *WeChat) WxGetOtherPermanentMaterial(materialId string) (*os.File, error) {
-	result, err := getPermanentMaterial(materialId, w.WxGetAccessToken())
+func (m *WxMaterial) WxGetOtherPermanentMaterial(materialId string) (*os.File, error) {
+	result, err := getPermanentMaterial(materialId, m.token.WxGetAccessToken())
 	materialFile, err := os.Create(materialId)
 	_, err = materialFile.Write(result)
 	return materialFile, err
 }
 
 // 删除永久素材
-func (w *WeChat) WxDeleteMaterial(mediaId string) bool {
-	reqUrl := fmt.Sprintf(delete_material, w.WxGetAccessToken())
+func (m *WxMaterial) WxDeleteMaterial(mediaId string) bool {
+	reqUrl := fmt.Sprintf(delete_material, m.token.WxGetAccessToken())
 	body := map[string]string{
 		"media_id": mediaId,
 	}
@@ -229,8 +233,8 @@ func (w *WeChat) WxDeleteMaterial(mediaId string) bool {
 }
 
 // 获取素材总数
-func (w *WeChat) WxGetMaterialTotalNum() enpity.MaterialTotalNum {
-	reqUrl := fmt.Sprintf(get_material_total_nums, w.WxGetAccessToken())
+func (m *WxMaterial) WxGetMaterialTotalNum() enpity.MaterialTotalNum {
+	reqUrl := fmt.Sprintf(get_material_total_nums, m.token.WxGetAccessToken())
 	msg, err := http.Get(reqUrl)
 	var totalNum enpity.MaterialTotalNum
 	err = json.Unmarshal(msg, &totalNum)
@@ -241,8 +245,8 @@ func (w *WeChat) WxGetMaterialTotalNum() enpity.MaterialTotalNum {
 }
 
 // 获取永久图文消息素材列表
-func (w *WeChat) WxGetNewsMaterialList(offset, count int64) enpity.NewsMaterialList {
-	reqUrl := fmt.Sprintf(get_material_list, w.WxGetAccessToken())
+func (m *WxMaterial) WxGetNewsMaterialList(offset, count int64) enpity.NewsMaterialList {
+	reqUrl := fmt.Sprintf(get_material_list, m.token.WxGetAccessToken())
 	body := map[string]interface{}{
 		"type":   wxconsts.MATERIAL_NEWS,
 		"offset": offset,
@@ -258,8 +262,8 @@ func (w *WeChat) WxGetNewsMaterialList(offset, count int64) enpity.NewsMaterialL
 }
 
 // 获取其他类型（图片、语音、视频）素材列表
-func (w *WeChat) WxGetOtherMaterialList(materialType string, offset, count int64) enpity.OtherMaterialList {
-	reqUrl := fmt.Sprintf(get_material_list, w.WxGetAccessToken())
+func (m *WxMaterial) WxGetOtherMaterialList(materialType string, offset, count int64) enpity.OtherMaterialList {
+	reqUrl := fmt.Sprintf(get_material_list, m.token.WxGetAccessToken())
 	body := map[string]interface{}{
 		"type":   materialType,
 		"offset": offset,

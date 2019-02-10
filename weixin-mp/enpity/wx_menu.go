@@ -5,7 +5,7 @@ import (
 )
 
 // 微信自定义菜单
-type WxMenu struct {
+type WxMpMenu struct {
 	Button    []WxButton `json:"button,omitempty"`
 	Matchrule Matchrule  `json:"matchrule,omitempty"`
 }
@@ -40,8 +40,8 @@ type Matchrule struct {
 	Language           string `json:"language,omitempty"`
 }
 
-// 将WxMenu转换为json字段
-func (this *WxMenu) ToJson(menu WxMenu) string {
+// 将WxMpMenu转换为json字段
+func (this *WxMpMenu) ToJson(menu WxMpMenu) string {
 	menuJson, err := json.Marshal(menu)
 	if err != nil {
 		panic(err)

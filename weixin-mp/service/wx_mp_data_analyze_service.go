@@ -82,9 +82,13 @@ const (
 	get_interface_summary_hour = "https://api.weixin.qq.com/datacube/getinterfacesummaryhour?access_token=%s"
 )
 
+type WxDataAnalyze struct {
+	token	*Token
+}
+
 // 获取用户增减数据（getusersummary）
-func (w *WeChat) WxMpGetUserSummary(start, end time.Time) enpity.WxUserSummary {
-	reqUrl := fmt.Sprintf(get_user_summary, w.WxGetAccessToken())
+func (d *WxDataAnalyze) WxMpGetUserSummary(start, end time.Time) enpity.WxUserSummary {
+	reqUrl := fmt.Sprintf(get_user_summary, d.token.WxGetAccessToken())
 	msg, err := wxDataAnalyzeRequest(reqUrl, start, end)
 	var result enpity.WxUserSummary
 	err = json.Unmarshal(msg, &result)
@@ -95,8 +99,8 @@ func (w *WeChat) WxMpGetUserSummary(start, end time.Time) enpity.WxUserSummary {
 }
 
 // 获取累计用户数据（getusercumulate）
-func (w *WeChat) WxMpGetUserCumulate(start, end time.Time) enpity.WxUserCumulate {
-	reqUrl := fmt.Sprintf(get_user_cumulate, w.WxGetAccessToken())
+func (d *WxDataAnalyze) WxMpGetUserCumulate(start, end time.Time) enpity.WxUserCumulate {
+	reqUrl := fmt.Sprintf(get_user_cumulate, d.token.WxGetAccessToken())
 	msg, err := wxDataAnalyzeRequest(reqUrl, start, end)
 	var result enpity.WxUserCumulate
 	err = json.Unmarshal(msg, &result)
@@ -107,8 +111,8 @@ func (w *WeChat) WxMpGetUserCumulate(start, end time.Time) enpity.WxUserCumulate
 }
 
 // 获取图文群发每日数据（getarticlesummary）
-func (w *WeChat) WxMpGetArticleSummary(start, end time.Time) enpity.WxArticleSummary {
-	reqUrl := fmt.Sprintf(get_article_summary, w.WxGetAccessToken())
+func (d *WxDataAnalyze) WxMpGetArticleSummary(start, end time.Time) enpity.WxArticleSummary {
+	reqUrl := fmt.Sprintf(get_article_summary, d.token.WxGetAccessToken())
 	msg, err := wxDataAnalyzeRequest(reqUrl, start, end)
 	var result enpity.WxArticleSummary
 	err = json.Unmarshal(msg, &result)
@@ -119,8 +123,8 @@ func (w *WeChat) WxMpGetArticleSummary(start, end time.Time) enpity.WxArticleSum
 }
 
 // 获取图文群发总数据（getarticletotal）
-func (w *WeChat) WxMpGetArticleTotal(start, end time.Time) enpity.WxArticleTotal {
-	reqUrl := fmt.Sprintf(get_article_total, w.WxGetAccessToken())
+func (d *WxDataAnalyze) WxMpGetArticleTotal(start, end time.Time) enpity.WxArticleTotal {
+	reqUrl := fmt.Sprintf(get_article_total, d.token.WxGetAccessToken())
 	msg, err := wxDataAnalyzeRequest(reqUrl, start, end)
 	var result enpity.WxArticleTotal
 	err = json.Unmarshal(msg, &result)
@@ -131,8 +135,8 @@ func (w *WeChat) WxMpGetArticleTotal(start, end time.Time) enpity.WxArticleTotal
 }
 
 // 获取图文统计数据（getuserread）
-func (w *WeChat) WxMpGetUserRead(start, end time.Time) enpity.WxUserRead {
-	reqUrl := fmt.Sprintf(get_user_read, w.WxGetAccessToken())
+func (d *WxDataAnalyze) WxMpGetUserRead(start, end time.Time) enpity.WxUserRead {
+	reqUrl := fmt.Sprintf(get_user_read, d.token.WxGetAccessToken())
 	msg, err := wxDataAnalyzeRequest(reqUrl, start, end)
 	var result enpity.WxUserRead
 	err = json.Unmarshal(msg, &result)
@@ -143,8 +147,8 @@ func (w *WeChat) WxMpGetUserRead(start, end time.Time) enpity.WxUserRead {
 }
 
 // 获取图文统计分时数据（getuserreadhour）
-func (w *WeChat) WxMpGetUserReadHour(start, end time.Time) enpity.WxUserReadHour {
-	reqUrl := fmt.Sprintf(get_user_read_hour, w.WxGetAccessToken())
+func (d *WxDataAnalyze) WxMpGetUserReadHour(start, end time.Time) enpity.WxUserReadHour {
+	reqUrl := fmt.Sprintf(get_user_read_hour, d.token.WxGetAccessToken())
 	msg, err := wxDataAnalyzeRequest(reqUrl, start, end)
 	var result enpity.WxUserReadHour
 	err = json.Unmarshal(msg, &result)
@@ -155,8 +159,8 @@ func (w *WeChat) WxMpGetUserReadHour(start, end time.Time) enpity.WxUserReadHour
 }
 
 // 获取图文分享转发数据（getusershare）
-func (w *WeChat) WxMpGetUserShare(start, end time.Time) enpity.WxUserShare {
-	reqUrl := fmt.Sprintf(get_user_share, w.WxGetAccessToken())
+func (d *WxDataAnalyze) WxMpGetUserShare(start, end time.Time) enpity.WxUserShare {
+	reqUrl := fmt.Sprintf(get_user_share, d.token.WxGetAccessToken())
 	msg, err := wxDataAnalyzeRequest(reqUrl, start, end)
 	var result enpity.WxUserShare
 	err = json.Unmarshal(msg, &result)
@@ -167,8 +171,8 @@ func (w *WeChat) WxMpGetUserShare(start, end time.Time) enpity.WxUserShare {
 }
 
 // 获取图文分享转发分时数据（getusersharehour）
-func (w *WeChat) WxMpGetUserShareHour(start, end time.Time) enpity.WxUserShareHour {
-	reqUrl := fmt.Sprintf(get_user_share_hour, w.WxGetAccessToken())
+func (d *WxDataAnalyze) WxMpGetUserShareHour(start, end time.Time) enpity.WxUserShareHour {
+	reqUrl := fmt.Sprintf(get_user_share_hour, d.token.WxGetAccessToken())
 	msg, err := wxDataAnalyzeRequest(reqUrl, start, end)
 	var result enpity.WxUserShareHour
 	err = json.Unmarshal(msg, &result)
@@ -179,8 +183,8 @@ func (w *WeChat) WxMpGetUserShareHour(start, end time.Time) enpity.WxUserShareHo
 }
 
 // 获取消息发送概况数据（getupstreammsg）
-func (w *WeChat) WxMpGetUpStreamMsg(start, end time.Time) enpity.WxUpStreamMsg {
-	reqUrl := fmt.Sprintf(get_up_stream_msg, w.WxGetAccessToken())
+func (d *WxDataAnalyze) WxMpGetUpStreamMsg(start, end time.Time) enpity.WxUpStreamMsg {
+	reqUrl := fmt.Sprintf(get_up_stream_msg, d.token.WxGetAccessToken())
 	msg, err := wxDataAnalyzeRequest(reqUrl, start, end)
 	var result enpity.WxUpStreamMsg
 	err = json.Unmarshal(msg, &result)
@@ -191,8 +195,8 @@ func (w *WeChat) WxMpGetUpStreamMsg(start, end time.Time) enpity.WxUpStreamMsg {
 }
 
 // 获取消息分送分时数据（getupstreammsghour）
-func (w *WeChat) WxMpGetUpStreamMsgHour(start, end time.Time) enpity.WxUpStreamMsgHour {
-	reqUrl := fmt.Sprintf(get_up_stream_msg_hour, w.WxGetAccessToken())
+func (d *WxDataAnalyze) WxMpGetUpStreamMsgHour(start, end time.Time) enpity.WxUpStreamMsgHour {
+	reqUrl := fmt.Sprintf(get_up_stream_msg_hour, d.token.WxGetAccessToken())
 	msg, err := wxDataAnalyzeRequest(reqUrl, start, end)
 	var result enpity.WxUpStreamMsgHour
 	err = json.Unmarshal(msg, &result)
@@ -203,8 +207,8 @@ func (w *WeChat) WxMpGetUpStreamMsgHour(start, end time.Time) enpity.WxUpStreamM
 }
 
 // 获取消息发送周数据（getupstreammsgweek）
-func (w *WeChat) WxMpGetUpStreamMsgWeek(start, end time.Time) enpity.WxUpStreamMsgWeek {
-	reqUrl := fmt.Sprintf(get_up_stream_msg_week, w.WxGetAccessToken())
+func (d *WxDataAnalyze) WxMpGetUpStreamMsgWeek(start, end time.Time) enpity.WxUpStreamMsgWeek {
+	reqUrl := fmt.Sprintf(get_up_stream_msg_week, d.token.WxGetAccessToken())
 	msg, err := wxDataAnalyzeRequest(reqUrl, start, end)
 	var result enpity.WxUpStreamMsgWeek
 	err = json.Unmarshal(msg, &result)
@@ -215,8 +219,8 @@ func (w *WeChat) WxMpGetUpStreamMsgWeek(start, end time.Time) enpity.WxUpStreamM
 }
 
 // 获取消息发送月数据（getupstreammsgmonth）
-func (w *WeChat) WxMpGetUpStreamMsgMonth(start, end time.Time) enpity.WxUpStreamMsgMonth {
-	reqUrl := fmt.Sprintf(get_up_stream_msg_month, w.WxGetAccessToken())
+func (d *WxDataAnalyze) WxMpGetUpStreamMsgMonth(start, end time.Time) enpity.WxUpStreamMsgMonth {
+	reqUrl := fmt.Sprintf(get_up_stream_msg_month, d.token.WxGetAccessToken())
 	msg, err := wxDataAnalyzeRequest(reqUrl, start, end)
 	wxerr.WxMpErrorFromByte(msg, nil)
 	var result enpity.WxUpStreamMsgMonth
@@ -228,8 +232,8 @@ func (w *WeChat) WxMpGetUpStreamMsgMonth(start, end time.Time) enpity.WxUpStream
 }
 
 // 获取消息发送分布数据（getupstreammsgdist）
-func (w *WeChat) WxMpGetUpStreamMsgDist(start, end time.Time) enpity.WxUpStreamMsgDist {
-	reqUrl := fmt.Sprintf(get_up_stream_msg_dist, w.WxGetAccessToken())
+func (d *WxDataAnalyze) WxMpGetUpStreamMsgDist(start, end time.Time) enpity.WxUpStreamMsgDist {
+	reqUrl := fmt.Sprintf(get_up_stream_msg_dist, d.token.WxGetAccessToken())
 	msg, err := wxDataAnalyzeRequest(reqUrl, start, end)
 	wxerr.WxMpErrorFromByte(msg, nil)
 	var result enpity.WxUpStreamMsgDist
@@ -241,8 +245,8 @@ func (w *WeChat) WxMpGetUpStreamMsgDist(start, end time.Time) enpity.WxUpStreamM
 }
 
 // 获取消息发送分布周数据（getupstreammsgdistweek）
-func (w *WeChat) WxMpGetUpStreamMsgDistWeek(start, end time.Time) enpity.WxUpStreamMsgDistWeek {
-	reqUrl := fmt.Sprintf(get_up_stream_msg_dist_week, w.WxGetAccessToken())
+func (d *WxDataAnalyze) WxMpGetUpStreamMsgDistWeek(start, end time.Time) enpity.WxUpStreamMsgDistWeek {
+	reqUrl := fmt.Sprintf(get_up_stream_msg_dist_week, d.token.WxGetAccessToken())
 	msg, err := wxDataAnalyzeRequest(reqUrl, start, end)
 	wxerr.WxMpErrorFromByte(msg, nil)
 	var result enpity.WxUpStreamMsgDistWeek
@@ -254,8 +258,8 @@ func (w *WeChat) WxMpGetUpStreamMsgDistWeek(start, end time.Time) enpity.WxUpStr
 }
 
 // 获取消息发送分布月数据（getupstreammsgdistmonth）
-func (w *WeChat) WxMpGetUpStreamMsgDistMonth(start, end time.Time) enpity.WxUpStreamMsgDistMonth {
-	reqUrl := fmt.Sprintf(get_up_stream_msg_dist_month, w.WxGetAccessToken())
+func (d *WxDataAnalyze) WxMpGetUpStreamMsgDistMonth(start, end time.Time) enpity.WxUpStreamMsgDistMonth {
+	reqUrl := fmt.Sprintf(get_up_stream_msg_dist_month, d.token.WxGetAccessToken())
 	msg, err := wxDataAnalyzeRequest(reqUrl, start, end)
 	var result enpity.WxUpStreamMsgDistMonth
 	err = json.Unmarshal(msg, &result)
@@ -266,8 +270,8 @@ func (w *WeChat) WxMpGetUpStreamMsgDistMonth(start, end time.Time) enpity.WxUpSt
 }
 
 // 获取接口分析数据（getinterfacesummary）
-func (w *WeChat) WxGetInterfaceSummary(start, end time.Time) enpity.WxInterfaceSummary {
-	reqUrl := fmt.Sprintf(get_interface_summary, w.WxGetAccessToken())
+func (d *WxDataAnalyze) WxGetInterfaceSummary(start, end time.Time) enpity.WxInterfaceSummary {
+	reqUrl := fmt.Sprintf(get_interface_summary, d.token.WxGetAccessToken())
 	msg, err := wxDataAnalyzeRequest(reqUrl, start, end)
 	var result enpity.WxInterfaceSummary
 	err = json.Unmarshal(msg, &result)
@@ -278,8 +282,8 @@ func (w *WeChat) WxGetInterfaceSummary(start, end time.Time) enpity.WxInterfaceS
 }
 
 // 获取接口分析分时数据（getinterfacesummaryhour）
-func (w *WeChat) WxGetInterfaceSummaryHour(start, end time.Time) enpity.WxInterfaceSummaryHour {
-	reqUrl := fmt.Sprintf(get_interface_summary_hour, w.WxGetAccessToken())
+func (d *WxDataAnalyze) WxGetInterfaceSummaryHour(start, end time.Time) enpity.WxInterfaceSummaryHour {
+	reqUrl := fmt.Sprintf(get_interface_summary_hour, d.token.WxGetAccessToken())
 	msg, err := wxDataAnalyzeRequest(reqUrl, start, end)
 	var result enpity.WxInterfaceSummaryHour
 	err = json.Unmarshal(msg, &result)

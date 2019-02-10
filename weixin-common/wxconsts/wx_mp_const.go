@@ -42,17 +42,23 @@ const (
 	PULL_USER_INFO_URL      = "https://api.weixin.qq.com/sns/userinfo?access_token=%s&openid=%s&lang=zh_CN"
 	VERIFY_OAUTH_TOKEN      = "https://api.weixin.qq.com/sns/auth?access_token=%s&openid=%s"
 
+	// 微信推送消息类型
+
+	MSG_TYPE_TEXT        = "text"
+	MSG_TYPE_IMAGE       = "image"
+	MSG_TYPE_VOICE       = "voice"
+	MSG_TYPE_VIDEO       = "video"
+	MSG_TYPE_SHORT_VIDEO = "shortvideo"
+	MSG_TYPE_LOCATION    = "location"
+	MSG_TYPE_LINK        = "link"
+	MSG_TYPE_EVENT       = "event"
+
 	// 微信推送事件类型
 
-	MSG_EVENT_TYPR_TEXT        = "text"
-	MSG_EVENT_TYPE_IMAGE       = "image"
-	MSG_EVENT_TYPE_VOICE       = "voice"
-	MSG_EVENT_TYPE_VIDEO       = "video"
-	MSG_EVENT_TYPE_SHORT_VIDEO = "shortvideo"
-	MSG_EVENT_TYPE_LOCATION    = "location"
-	MSG_EVENT_TYPE_LINK        = "link"
-	MSG_EVENT_TYPE_EVENT       = "event"
-	MSG_EVENT_TYPE_QUALIFICATION_VERIFY	= "qualification_verify"
-	MSG_EVENT_TYPE_NAMING_VERIFY	= "naming_verify"
-	MSG_EVENT_TYPE_ANNUAL_RENEW	= "annual_renew"
+	EVENT_TYPE_SUBSCRIBE	= "subscribe"
+	EVENT_TYPE_UNSUBSCRIBE	= "unsubscribe"
+	EVENT_TYPE_SCAN	= "SCAN"
+	EVENT_TYPE_LOCATION	= "LOCATION"
+	EVENT_TYPE_CLICL	= "CLICK"
 )
+

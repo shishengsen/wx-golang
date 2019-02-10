@@ -57,7 +57,7 @@ func (w *WeChat) WxTicket2QCode(ticket string) (*os.File, error) {
 
 // 微信带参数二维码请求实际调用
 func qcodeRequest(w WeChat, body interface{}) (enpity.WxQRCodeResult, error) {
-	reqUrl := fmt.Sprintf(qcode_request, w.WxGetAccessToken())
+	reqUrl := fmt.Sprintf(qcode_request, w.token.WxGetAccessToken())
 	msg, err := http.Post(reqUrl, string(utils.Interface2byte(body)))
 	var qCode enpity.WxQRCodeResult
 	json.Unmarshal(msg, &qCode)

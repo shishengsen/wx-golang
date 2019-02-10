@@ -33,7 +33,7 @@ func (w *WeChat) RouterInit() *MsgRouter {
 }
 
 // 开始路由规则匹配
-func (r *MsgRouter) Begin() *MsgRule {
+func (r *MsgRouter) Start() *MsgRule {
 	return &MsgRule{router: r}
 }
 
@@ -46,8 +46,8 @@ func (r *MsgRule) End() *MsgRouter {
 // 微信消息路由分发消息处理
 // 目前设置每个路由消息处理仅处理一次
 // 根据Async决定是否使用异步操作
-func (w *WeChat) route(wxMsg enpity.WxMessage) {
-	routers := w.router
+func (w *WeChat) Route(wxMsg enpity.WxMessage) {
+	routers := w.Router
 	for _, rule := range routers.rules {
 		if rule.match(wxMsg) {
 			if rule.async {
@@ -60,11 +60,6 @@ func (w *WeChat) route(wxMsg enpity.WxMessage) {
 }
 
 // ###################### 消息匹配规则 ######################
-
-func (r *MsgRule) FromUser(fromUser string) *MsgRule {
-	r.fromUser = fromUser
-	return r
-}
 
 func (r *MsgRule) MsgType(msgType string) *MsgRule {
 	r.msgType = msgType
@@ -91,10 +86,20 @@ func (r *MsgRule) Async(async bool) *MsgRule {
 	return r
 }
 
+func (r *MsgRule) Handler(handler MsgHandler) *MsgRule {
+	r.handler = handler
+	return r
+}
+
+// 某个消息事件多个匹配规则（待支持）
+func (r *MsgRule) Next() *MsgRule {
+	return r
+}
+
 // 消息规则匹配
 func (r *MsgRule) match(wxMsg enpity.WxMessage) bool {
-	return r.fromUser == wxMsg.FromUserName &&
-		r.msgType == wxMsg.MsgType &&
+	return r.msgType == wxMsg.MsgType &&
 		r.event == wxMsg.Event &&
-		r.eventKey == wxMsg.EventKey
+		r.eventKey == wxMsg.EventKey &&
+		r.content == wxMsg.Content
 }

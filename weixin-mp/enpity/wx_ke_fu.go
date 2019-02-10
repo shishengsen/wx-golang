@@ -4,14 +4,14 @@ import (
 	"encoding/json"
 )
 
-type WxKf struct {
+type WxMpKf struct {
 	KfAccount string `json:"kf_account,omitempty"`
 	NickName  string `json:"nickname,omitempty"`
 	Password  string `json:"password,omitempty"`
 }
 
 type WxKfs struct {
-	Kfs []WxKf `json:"kf_list,omitempty"`
+	Kfs []WxMpKf `json:"kf_list,omitempty"`
 }
 
 type WxKfMsg struct {
@@ -64,7 +64,7 @@ type KfArticle struct {
 	PicUrl      string `json:"picurl"`
 }
 
-func (this *WxKf) ToJson(kf WxKf) string {
+func (this *WxMpKf) ToJson(kf WxMpKf) string {
 	kfJson, err := json.Marshal(kf)
 	if err != nil {
 		panic(err)
