@@ -5,9 +5,9 @@ import (
 )
 
 // 微信自定义菜单
-type WxMenu struct {
-	Button 			[]WxButton			`json:"button,omitempty"`
-	Matchrule		Matchrule			`json:"matchrule,omitempty"`
+type WxMpMenu struct {
+	Button    []WxButton `json:"button,omitempty"`
+	Matchrule Matchrule  `json:"matchrule,omitempty"`
 }
 
 // 微信菜单主按钮
@@ -31,17 +31,17 @@ type WxSubButton struct {
 
 // 微信个性化菜单的选项
 type Matchrule struct {
-	TagId				string				`json:"tag_id,omitempty"`
-	Sex					int32				`json:"sex,omitempty"`
-	Country				string				`json:"country,omitempty"`
-	Province			string				`json:"province,omitempty"`
-	City				string				`json:"city,omitempty"`
-	ClientPlatformType	string				`json:"client_platform_type,omitempty"`
-	Language			string				`json:"language,omitempty"`
+	TagId              string `json:"tag_id,omitempty"`
+	Sex                int32  `json:"sex,omitempty"`
+	Country            string `json:"country,omitempty"`
+	Province           string `json:"province,omitempty"`
+	City               string `json:"city,omitempty"`
+	ClientPlatformType string `json:"client_platform_type,omitempty"`
+	Language           string `json:"language,omitempty"`
 }
 
-// 将WxMenu转换为json字段
-func (this *WxMenu) ToJson(menu WxMenu) string {
+// 将WxMpMenu转换为json字段
+func (this *WxMpMenu) ToJson(menu WxMpMenu) string {
 	menuJson, err := json.Marshal(menu)
 	if err != nil {
 		panic(err)

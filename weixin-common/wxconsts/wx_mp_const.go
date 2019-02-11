@@ -22,17 +22,17 @@ const (
 
 	// 素材类别
 
-	MATERIAL_NEWS				=	"news"
-	TEMP_MATERIAL_IMAGE			=	"image"
-	TEMP_MATERIAL_VOICE			=	"voice"
-	TEMP_MATERIAL_VIDEO			=	"video"
-	TEMP_MATERIAL_THUMB			=	"thumb"
+	MATERIAL_NEWS       = "news"
+	TEMP_MATERIAL_IMAGE = "image"
+	TEMP_MATERIAL_VOICE = "voice"
+	TEMP_MATERIAL_VIDEO = "video"
+	TEMP_MATERIAL_THUMB = "thumb"
 
 	// 语言类别
 
-	LANG_ZH_CN				= "zh_CN"
-	LANG_ZH_TW				= "zh_TW"
-	LANG_EN					= "en"
+	LANG_ZH_CN = "zh_CN"
+	LANG_ZH_TW = "zh_TW"
+	LANG_EN    = "en"
 
 	// 微信网页授权链接
 
@@ -42,14 +42,24 @@ const (
 	PULL_USER_INFO_URL      = "https://api.weixin.qq.com/sns/userinfo?access_token=%s&openid=%s&lang=zh_CN"
 	VERIFY_OAUTH_TOKEN      = "https://api.weixin.qq.com/sns/auth?access_token=%s&openid=%s"
 
+	// 微信推送消息类型
+
+	MSG_TYPE_TEXT        = "text"
+	MSG_TYPE_IMAGE       = "image"
+	MSG_TYPE_VOICE       = "voice"
+	MSG_TYPE_VIDEO       = "video"
+	MSG_TYPE_SHORT_VIDEO = "shortvideo"
+	MSG_TYPE_LOCATION    = "location"
+	MSG_TYPE_LINK        = "link"
+	MSG_TYPE_EVENT       = "event"
+	MSG_TYPE_TRANSFER_CUSTOMER_SERVICE	= "transfer_customer_service"
+
 	// 微信推送事件类型
 
-	MSG_EVENT_TYPR_TEXT				=		"text"
-	MSG_EVENT_TYPE_IMAGE			=		"image"
-	MSG_EVENT_TYPE_VOICE			=		"voice"
-	MSG_EVENT_TYPE_VIDEO			=		"video"
-	MSG_EVENT_TYPE_SHORT_VIDEO		=		"shortvideo"
-	MSG_EVENT_TYPE_LOCATION			=		"location"
-	MSG_EVENT_TYPE_LINK				=		"link"
-	MSG_EVENT_TYPE_EVENT			=		"event"
+	EVENT_TYPE_SUBSCRIBE	= "subscribe"
+	EVENT_TYPE_UNSUBSCRIBE	= "unsubscribe"
+	EVENT_TYPE_SCAN	= "SCAN"
+	EVENT_TYPE_LOCATION	= "LOCATION"
+	EVENT_TYPE_CLICL	= "CLICK"
 )
+

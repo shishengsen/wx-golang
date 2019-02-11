@@ -4,14 +4,23 @@ import (
 	"encoding/json"
 )
 
-type WxKf struct {
+type WxMpKf struct {
 	KfAccount string `json:"kf_account,omitempty"`
 	NickName  string `json:"nickname,omitempty"`
 	Password  string `json:"password,omitempty"`
+	KfNick	string	`json:"kf_nick,omitempty"`
+	KfId	string	`json:"kf_id,omitempty"`
+	KfHeadimgurl	string	`json:"kf_headimgurl,omitempty"`
+	KfWx	string	`json:"kf_wx,omitempty"`
+	InviteWx	string	`json:"invite_wx,omitempty"`
+	InviteExpireTime	int64	`json:"invite_expire_time,omitempty"`
+	InviteStatus	string	`json:"invite_status,omitempty"`
+	Status		int16	`json:"status,omitempty"`
+	AcceptedCase	int32	`json:"accepted_case,omitempty"`
 }
 
 type WxKfs struct {
-	Kfs []WxKf `json:"kf_list,omitempty"`
+	Kfs []WxMpKf `json:"kf_list,omitempty"`
 }
 
 type WxKfMsg struct {
@@ -64,7 +73,23 @@ type KfArticle struct {
 	PicUrl      string `json:"picurl"`
 }
 
-func (this *WxKf) ToJson(kf WxKf) string {
+type KfRecordList struct {
+	StartTime	int64	`json:"starttime,omitempty"`
+	EndTime		int64	`json:"endtime,omitempty"`
+	MsgId		int32	`json:"msgid,omitempty"`
+	Number		int32	`json:"number,omitempty"`
+	RecordList	[]Record	`json:"recordlist,omitempty"`
+}
+
+type Record struct {
+	OpenId	string	`json:"openid"`
+	OperCode	int64	`json:"opercode"`
+	Text	string	`json:"text"`
+	Time	int64	`json:"time"`
+	Worker	string	`json:"worker"`
+}
+
+func (this *WxMpKf) ToJson(kf WxMpKf) string {
 	kfJson, err := json.Marshal(kf)
 	if err != nil {
 		panic(err)

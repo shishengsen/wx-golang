@@ -2,37 +2,49 @@ package error
 
 import (
 	"encoding/json"
+	"github.com/reactivex/rxgo/errors"
 	"net/http"
-	"wx-golang/weixin-common/log"
 )
 
 type WxMpError struct {
-	Errcode				int32				`json:"errcode"`
-	Errmsg				string				`json:"errmsg"`
+	ErrCode int32  `json:"errcode"`
+	ErrMsg  string `json:"errmsg"`
 }
 
-func (e *WxMpError)ToJson(w WxMpError) string {
-	bytes, err := json.Marshal(w)
+type WxPayError struct {
+	ErrCode int32  `json:"errcode"`
+	ErrMsg  string `json:"errmsg"`
+}
+
+func (e *WxMpError) Err() error {
+	s, err := e.ToJson()
 	if err != nil {
-		panic(err)
+		return err
 	}
-	return string(bytes)
+	return errors.New(errors.ErrorCode(uint32(e.ErrCode)), s)
+}
+
+func (e *WxMpError) ToJson() (string, error) {
+	bytes, err := json.Marshal(e)
+	if err != nil {
+		return "", err
+	}
+	return string(bytes), nil
 }
 
 // 对微信返回信息进行错误信息扫描，如果发现非正常状态返回，则抛出异常信息
-func WxMpErrorFromByte(result []byte, resp *http.Response) {
+func WxMpErrorFromByte(result []byte, resp *http.Response) error {
 	var tmp WxMpError
 	err := json.Unmarshal(result, &tmp)
 	if err != nil {
-		log.CheckError(err)
+		return err
 	}
-	if tmp.Errcode != 0 {
-		panic(tmp)
+	if tmp.ErrCode != 0 {
+		return tmp.Err()
 	}
-}
-
-func WxPayErrorFromByte(result []byte, resq *http.Response) []byte {
-
 	return nil
 }
 
+func WxPayErrorFromByte(result []byte, resq *http.Response) []byte {
+	return nil
+}
