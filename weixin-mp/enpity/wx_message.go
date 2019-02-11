@@ -43,10 +43,15 @@ type WxMessage struct {
 	Longitude float64 `xml:"Longitude,omitempty"` // 地理位置经度
 	Precision string  `xml:"Precision,omitempty"` // 地理位置精度
 
-	//	微信认证
+	// 微信认证
 	FailTime	int64	`xml:"FailTime,omitempty"`
 	FailReason	string	`xml:"FailReason,omitempty"`
 	ExpiredTime	int64	`xml:"ExpiredTime,omitempty"`
+
+	// 新版本客服消息
+	TransInfo	struct{
+		KfAccount	string	`xml:"KfAccount,omitempty"`
+	}	`xml:"TransInfo,omitempty"`
 
 
 }

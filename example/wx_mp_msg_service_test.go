@@ -25,7 +25,17 @@ func TestRouter(test *testing.T) {
 	w := &service.WeChat{}
 	router := w.RouterInit()
 	g := GuanZhu{}
-	router.Start().MsgType(wxconsts.MSG_TYPE_EVENT).Event(wxconsts.EVENT_TYPE_SUBSCRIBE).Handler(&g).End()
-	msg := enpity.WxMessage{MsgType:"event", Event:"subscribe"}
-	w.Route(msg)
+	router.Start().
+		MsgType(wxconsts.MSG_TYPE_EVENT).
+		Event(wxconsts.EVENT_TYPE_SUBSCRIBE).
+		Handler(&g).
+		End().
+		Start().
+		MsgType(wxconsts.MSG_TYPE_EVENT).
+		Event(wxconsts.EVENT_TYPE_SCAN).
+		Handler(&SaoMa{}).End()
+	msg1 := enpity.WxMessage{MsgType:"event", Event:"subscribe"}
+	msg2 := enpity.WxMessage{MsgType:"event", Event:"SCAN"}
+	w.Route(msg1)
+	w.Route(msg2)
 }

@@ -18,7 +18,7 @@ func init() {
 		`%{color}%{time:15:04:05.000} %{shortfunc} ▶ %{level:.4s} %{color:reset} %{message}`,
 	)
 	s := strings.Join(strings.Split(time.Now().UTC().Format(time.UnixDate), " "), "-")
-	logFile, err := os.Create("log/wx-" + s + ".log")
+	logFile, err := os.Create("/Volumes/resources/code/GoProjects/src/wx-golang/log/wx-" + s + ".log")
 	CheckError(err)
 	backend1 := logging.NewLogBackend(logFile, "", 0)
 	backend2 := logging.NewLogBackend(os.Stderr, "", 0)

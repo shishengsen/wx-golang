@@ -102,7 +102,7 @@ func (w *WeChat) WxApiClearQuota() (map[string]interface{}, error) {
 func (w *WeChat) WxMpMsgPushEvent(s string) {
 	var msg enpity.WxMessage
 	_ = xml.Unmarshal([]byte(s), &msg)
-	w.route(msg)
+	w.Route(msg)
 }
 
 // 获取微信js的ticket

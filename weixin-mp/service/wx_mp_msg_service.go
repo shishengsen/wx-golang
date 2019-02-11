@@ -1,6 +1,7 @@
 package service
 
 import (
+	"fmt"
 	"wx-golang/weixin-common/utils"
 	"wx-golang/weixin-mp/enpity"
 )
@@ -8,6 +9,12 @@ import (
 // 继承该接口实现微信消息的处理
 type MsgHandler interface {
 	Handler(enpity.WxMessage)
+}
+
+type defaultHandler struct {}
+
+func (d *defaultHandler) Handler(msg enpity.WxMessage)  {
+
 }
 
 // 微信消息路由结构体
@@ -29,7 +36,9 @@ type MsgRule struct {
 
 // 初始化消息路由
 func (w *WeChat) RouterInit() *MsgRouter {
-	return &MsgRouter{}
+	router := &MsgRouter{}
+	w.Router = router
+	return router
 }
 
 // 开始路由规则匹配
@@ -48,6 +57,7 @@ func (r *MsgRule) End() *MsgRouter {
 // 根据Async决定是否使用异步操作
 func (w *WeChat) Route(wxMsg enpity.WxMessage) {
 	routers := w.Router
+	fmt.Printf("%#v\n", routers)
 	for _, rule := range routers.rules {
 		if rule.match(wxMsg) {
 			if rule.async {
@@ -87,7 +97,11 @@ func (r *MsgRule) Async(async bool) *MsgRule {
 }
 
 func (r *MsgRule) Handler(handler MsgHandler) *MsgRule {
-	r.handler = handler
+	if handler != nil {
+		r.handler = handler
+	} else {
+		r.handler = &defaultHandler{}
+	}
 	return r
 }
 

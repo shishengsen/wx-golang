@@ -52,6 +52,7 @@ const (
 	MSG_TYPE_LOCATION    = "location"
 	MSG_TYPE_LINK        = "link"
 	MSG_TYPE_EVENT       = "event"
+	MSG_TYPE_TRANSFER_CUSTOMER_SERVICE	= "transfer_customer_service"
 
 	// 微信推送事件类型
 

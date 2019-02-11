@@ -27,3 +27,75 @@
 
 - [ ] 图文消息留言管理
 - [ ] 新版客服功能
+
+#### example
+
+1. 如何使用消息路由
+
+    ```go
+    package service
+    
+    import (
+    	"wx-golang/weixin-mp/enpity"
+    )
+    
+    // 继承该接口实现微信消息的处理
+    type MsgHandler interface {
+    	Handler(enpity.WxMessage)
+    }    
+    ```
+
+    ```go
+    package example
+    
+    import (
+    	"fmt"
+    	"testing"
+    	"wx-golang/weixin-common/wxconsts"
+    	"wx-golang/weixin-mp/enpity"
+    	"wx-golang/weixin-mp/service"
+    )
+
+    type GuanZhu struct{}
+    
+    func (g *GuanZhu) Handler(enpity.WxMessage) {
+    	fmt.Print("关注事件")
+    }
+    
+    type SaoMa struct{}
+    
+    func (s *SaoMa) Handler(enpity.WxMessage) {
+    	fmt.Print("扫码事件")
+    }
+    
+    func TestRouter(test *testing.T) {
+    	w := &service.WeChat{}
+    	router := w.RouterInit()
+    	g := GuanZhu{}
+    	router.Start().
+    		MsgType(wxconsts.MSG_TYPE_EVENT).
+    		Event(wxconsts.EVENT_TYPE_SUBSCRIBE).
+    		Handler(&g).
+    		End().
+    		Start().
+    		MsgType(wxconsts.MSG_TYPE_EVENT).
+    		Event(wxconsts.EVENT_TYPE_SCAN).
+    		Handler(&SaoMa{}).End()
+    	msg1 := enpity.WxMessage{MsgType:"event", Event:"subscribe"}
+    	msg2 := enpity.WxMessage{MsgType:"event", Event:"SCAN"}
+    	w.Route(msg1)
+    	w.Route(msg2)
+    }
+    ```
+    
+    测试结果
+    
+    ```bash
+    === RUN   TestRouter
+    &service.MsgRouter{rules:[]*service.MsgRule{(*service.MsgRule)(0xc0001c7c00), (*service.MsgRule)(0xc0001c7c70)}}
+    关注事件&service.MsgRouter{rules:[]*service.MsgRule{(*service.MsgRule)(0xc0001c7c00), (*service.MsgRule)(0xc0001c7c70)}}
+    扫码事件--- PASS: TestRouter (0.00s)
+    PASS
+    
+    Process finished with exit code 0
+    ```
